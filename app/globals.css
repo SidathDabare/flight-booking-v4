@@ -1,0 +1,629 @@
+/* ============================================================================
+   PERFORMANCE OPTIMIZATION NOTES
+   ============================================================================
+
+   This stylesheet implements several performance optimizations:
+
+   1. MOBILE-FIRST BACKDROP FILTERS:
+      - Expensive backdrop-filter effects (blur, saturate) are disabled on mobile
+      - Only applied on desktop via @media (hover: hover) query
+      - Reduces GPU load and improves battery life on mobile devices
+      - Affected classes: .navbar-bg, .flight-search-bg, .navbar-bg-mobile
+
+   2. GPU ACCELERATION:
+      - Strategic use of transform: translateZ(0) to promote to GPU layer
+      - will-change hints for frequently animated elements
+      - Reduces main thread blocking during animations
+      - Applied to: navbar, buttons, mobile components
+
+   3. TRANSITION OPTIMIZATION:
+      - Separated transform and color transitions
+      - Only animate GPU-accelerated properties when possible
+      - Shadow effects moved to pseudo-elements to avoid layout recalculation
+      - See: .shining-button, button variants
+
+   4. REDUCED PAINT AREAS:
+      - Pseudo-elements used for decorative effects
+      - Prevents full component repaints on hover
+      - Improved frame rate for interactions
+
+   ============================================================================ */
+
+/* ============================================================================
+   TAILWIND CSS IMPORTS
+   ============================================================================ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================================
+   BROWSER RESET & BASE STYLES
+   ============================================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family:
+    var(--font-geist-sans),
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  font-feature-settings:
+    "rlig" 1,
+    "calt" 1;
+}
+
+/* Sinhala Language Support - Use Noto Sans Sinhala for Sinhala text */
+[lang="si"],
+[lang="si"] *,
+html[lang="si"] body {
+  font-family:
+    var(--font-noto-sinhala),
+    var(--font-geist-sans),
+    "Iskoola Pota",
+    "Nirmala UI",
+    sans-serif;
+}
+
+/* ============================================================================
+   THEME SYSTEM - CSS CUSTOM PROPERTIES
+   ============================================================================ */
+@layer base {
+  :root {
+    /*Color Palette - Light Theme */
+    --background: 0 0% 100%;
+    --foreground: 216 33% 20%;
+    --card: 0 0% 100%;
+    --card-foreground: 216 33% 20%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 216 33% 20%;
+    --blue-border: 206 100% 52%;
+    --white: 0 0% 100%;
+    --gray: 0, 0%, 85%, 0.76;
+
+    /* Primary - Purple */
+    --primary: 247 93% 67%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Deep Navy */
+    --secondary: 216 100% 15%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Muted - Light Gray */
+    --muted: 214 15% 97%;
+    --muted-foreground: 216 13% 50%;
+
+    /* Accent - Bright Cyan */
+    --accent: 194 100% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Destructive - Error Red */
+    --destructive: 0 100% 66%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders & Inputs */
+    --border: 214 15% 91%;
+    --input: 214 15% 91%;
+    --ring: 247 93% 67%;
+    --radius: 12px;
+
+    /* Sidebar Variables */
+    --sidebar-background: 0 0% 99%;
+    --sidebar-foreground: 216 13% 40%;
+    --sidebar-primary: 247 93% 67%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 214 15% 97%;
+    --sidebar-accent-foreground: 216 33% 20%;
+    --sidebar-border: 214 15% 91%;
+    --sidebar-ring: 247 93% 67%;
+  }
+
+  .dark {
+    /*Color Palette - Dark Theme */
+    --background: 216 33% 7%;
+    --foreground: 214 15% 95%;
+    --card: 216 33% 9%;
+    --card-foreground: 214 15% 95%;
+    --popover: 216 33% 9%;
+    --popover-foreground: 214 15% 95%;
+
+    /* Primary - Purple (adjusted for dark) */
+    --primary: 247 93% 67%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Lighter for dark mode */
+    --secondary: 216 20% 20%;
+    --secondary-foreground: 214 15% 95%;
+
+    /* Muted - Dark Gray */
+    --muted: 216 20% 15%;
+    --muted-foreground: 214 15% 60%;
+
+    /* Accent - Bright Cyan */
+    --accent: 194 100% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Destructive - Error Red */
+    --destructive: 0 100% 66%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders & Inputs */
+    --border: 216 20% 20%;
+    --input: 216 20% 20%;
+    --ring: 247 93% 67%;
+    --radius: 12px;
+
+    /* Sidebar Variables - Dark */
+    --sidebar-background: 216 33% 9%;
+    --sidebar-foreground: 214 15% 80%;
+    --sidebar-primary: 247 93% 67%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 216 20% 15%;
+    --sidebar-accent-foreground: 214 15% 95%;
+    --sidebar-border: 216 20% 20%;
+    --sidebar-ring: 247 93% 67%;
+  }
+
+  /* Admin Theme Variants */
+  .admin-theme-light {
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 35%;
+  }
+
+  .admin-theme-dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 85%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 85%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 85%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 85%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 55%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 85%;
+    --destructive: 0 62.8% 30.6%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --sidebar-foreground: 240 4.8% 80%;
+    --sidebar-accent-foreground: 240 4.8% 80%;
+  }
+}
+
+/* ============================================================================
+   BASE ELEMENT STYLES & TYPOGRAPHY
+   ============================================================================ */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+  }
+
+  /* Typography Enhancements */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: hsl(var(--foreground));
+  }
+
+  .font-small {
+    font-size: 10px;
+  }
+
+  button {
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  input,
+  textarea {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  /* Utility Classes */
+  .text-small {
+    font-size: 0.875rem;
+    letter-spacing: 0;
+  }
+
+  .z-60 {
+    z-index: 60;
+  }
+
+  /* Enhanced Focus States */
+  *:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: calc(var(--radius) - 2px);
+  }
+
+  /* Hide Number Input Spinners */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+/* ============================================================================
+   SCROLLBAR CUSTOMIZATION
+   ============================================================================ */
+::-webkit-scrollbar,
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom Visible Scrollbar */
+.scrollbar-visible::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  display: block;
+}
+
+.scrollbar-visible::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.scrollbar-visible::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.scrollbar-visible::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* Firefox scrollbar */
+.scrollbar-visible {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.05);
+}
+
+/* ============================================================================
+   ANIMATIONS & KEYFRAMES
+   ============================================================================ */
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 1s ease-out forwards;
+}
+
+.animate-scroll {
+  animation: scroll 40s linear infinite;
+}
+
+.animate-scroll:hover {
+  animation-play-state: paused;
+}
+
+/* Scroll Animation Classes */
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.scroll-animate.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+/* ============================================================================
+   COMPONENT-SPECIFIC STYLES
+   ============================================================================ */
+
+/* Navigation Bar - Style */
+.navbar-bg {
+  position: fixed;
+  top: 0;
+  z-index: 50;
+  /* Mobile: solid background for performance */
+  background: rgba(255, 255, 255, 0.98);
+  color: hsl(var(--foreground));
+  border-bottom: 1px solid hsl(var(--border));
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  /* GPU acceleration hint for smooth scrolling */
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Desktop only: Apply backdrop filter for glass effect */
+@media (hover: hover) and (min-width: 768px) {
+  .navbar-bg {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+  }
+}
+
+/* Navbar with scroll-up behavior */
+.navbar-bg.navbar-hidden {
+  transform: translateY(-100%);
+}
+
+.navbar-bg.navbar-visible {
+  transform: translateY(0);
+}
+
+:root.dark .navbar-bg {
+  /* Mobile: solid background */
+  background: rgba(15, 23, 42, 0.98);
+  border-bottom: 1px solid hsl(var(--border));
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  color: hsl(var(--foreground));
+}
+
+@media (hover: hover) and (min-width: 768px) {
+  :root.dark .navbar-bg {
+    background: rgba(15, 23, 42, 0.85);
+  }
+}
+
+.navbar-bg:hover,
+.navbar-bg.scrolled {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.06),
+    0 4px 8px rgba(0, 0, 0, 0.04);
+}
+
+.navbar-bg-mobile {
+  /* Always solid on mobile for best performance */
+  background: rgba(255, 255, 255, 0.98);
+  border-bottom: 1px solid hsl(var(--border));
+  /* GPU acceleration */
+  transform: translateZ(0);
+}
+
+:root.dark .navbar-bg-mobile {
+  background: rgba(15, 23, 42, 0.98);
+}
+
+/* Carousel - Simplified */
+.carousel-bg {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 16px;
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.08),
+    0 8px 16px rgba(0, 0, 0, 0.06);
+  color: hsl(var(--card-foreground));
+}
+
+.flight-search-bg {
+  /* Mobile: solid background for better performance */
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid hsl(var(--border));
+  border-radius: 5px;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.06),
+    0 4px 8px rgba(0, 0, 0, 0.04);
+  color: hsl(var(--foreground));
+}
+
+/* Desktop only: Apply expensive backdrop filter for visual enhancement */
+@media (hover: hover) and (min-width: 768px) {
+  .flight-search-bg {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+  }
+}
+
+:root.dark .flight-search-bg {
+  background: rgba(15, 23, 42, 0.98);
+}
+
+@media (hover: hover) and (min-width: 768px) {
+  :root.dark .flight-search-bg {
+    background: rgba(15, 23, 42, 0.95);
+  }
+}
+
+.carousel-overlay-bg {
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    transparent 100%
+  );
+}
+
+/* Text Container */
+.text-container {
+  width: 80%;
+  left: -10%;
+  color: white;
+}
+
+/* Button Effects - Optimized for Performance */
+.shining-button {
+  position: relative;
+  /* Only transition transform (GPU accelerated) */
+  transition: transform 0.15s ease;
+  /* Promote to GPU layer for smoother animations */
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.shining-button:hover {
+  /* Only use transform for animation - GPU accelerated */
+  transform: translateY(-1px) translateZ(0);
+  /* Shadow applied via pseudo-element to avoid layout recalculation */
+}
+
+.shining-button:hover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    0 8px 16px rgba(0, 0, 0, 0.08);
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.shining-button:active {
+  transform: translateY(0) translateZ(0);
+}
+
+/* Disable will-change after animation for memory optimization */
+@media (hover: none) {
+  .shining-button {
+    will-change: auto;
+  }
+}
+
+/* Product Card Interactions */
+.product-card:hover .product-card-heart {
+  right: 10px;
+  opacity: 1;
+  transition: all 0.5s ease-in-out;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+@media screen and (max-width: 640px) {
+  .display_hidden {
+    display: none;
+  }
+
+  .text-container {
+    width: 80%;
+    left: 10%;
+    margin-top: 80%;
+  }
+
+  /* Mobile overflow prevention */
+  * {
+    min-width: 0 !important;
+  }
+
+  .w-screen {
+    width: 100% !important;
+  }
+
+  body,
+  html {
+    overflow-x: hidden;
+  }
+
+  /* Ensure containers don't exceed viewport */
+  .container {
+    max-width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Prevent horizontal scroll in flex containers */
+  .flex {
+    min-width: 0;
+  }
+
+  /* Fix button widths on mobile */
+  button {
+    min-width: 0;
+  }
+}
+
+/* ============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .animate-slideIn,
+  .shining-button::before {
+    animation: none;
+    transition: none;
+  }
+
+  .navbar-bg {
+    transition: none;
+  }
+}

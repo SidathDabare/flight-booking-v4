@@ -1,0 +1,613 @@
+# Flight Booking Application - Claude Code Rules
+
+## CRITICAL REQUIREMENTS - READ FIRST
+
+### 🔒 Production-Ready Code Standard
+**ALL code generated MUST be production-ready and follow these mandatory checks:**
+
+1. **Security Audit (MANDATORY)**
+   - After writing ANY code, perform a comprehensive security review
+   - Verify NO sensitive information is exposed in the frontend (API keys, secrets, credentials)
+   - Check for common vulnerabilities: XSS, SQL injection, CSRF, insecure authentication
+   - Ensure all user inputs are validated and sanitized
+   - Verify proper authorization checks are in place
+   - Confirm environment variables are used correctly (never hardcoded secrets)
+   - Check that API routes have proper authentication/authorization
+   - Validate that error messages don't leak sensitive information
+
+2. **Token Budget Awareness (MANDATORY)**
+   - BEFORE starting major implementations, estimate token usage
+   - Check remaining token budget (visible in system warnings)
+   - If implementation requires >30,000 tokens, confirm with user first
+   - Break large tasks into smaller chunks if needed
+   - Current session budget should always be monitored
+
+3. **Code Quality Standards**
+   - All code must be fully typed with TypeScript
+   - Comprehensive error handling with try-catch blocks
+   - Input validation using Zod schemas
+   - Proper loading and error states in UI
+   - Mobile-responsive and accessible
+   - Dark mode compatible
+   - Follows all patterns defined in this rules file
+
+### 🔐 Security Checklist (Run After Every Code Generation)
+```
+✓ No API keys, secrets, or credentials in client-side code
+✓ All environment variables properly accessed via process.env (server-side only)
+✓ User inputs validated with Zod schemas
+✓ SQL/NoSQL injection prevention (parameterized queries, Mongoose)
+✓ XSS prevention (React's built-in escaping + proper sanitization)
+✓ CSRF protection (NextAuth handles this)
+✓ Authentication checks on all protected routes
+✓ Authorization checks (role-based access control)
+✓ Secure password handling (bcrypt hashing)
+✓ Rate limiting considered for sensitive endpoints
+✓ Error messages don't expose system details
+✓ File uploads are validated and sanitized
+✓ Session tokens are httpOnly and secure
+✓ No sensitive data in console.log statements
+✓ Database queries don't expose unnecessary data
+```
+
+### 📊 Token Management Protocol
+- **Small changes** (<5,000 tokens): Proceed without warning
+- **Medium changes** (5,000-15,000 tokens): Mention estimated usage
+- **Large changes** (15,000-50,000 tokens): Get explicit confirmation
+- **Major refactors** (>50,000 tokens): Break into phases, confirm each phase
+
+---
+
+## Project Overview
+Next.js 15 flight booking platform with NextAuth authentication, MongoDB, Stripe payments, and Socket.IO real-time messaging. Uses TypeScript, Tailwind CSS with shadcn/ui components, and next-intl for internationalization.
+
+## Technology Stack
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript 5
+- **Styling**: Tailwind CSS 3.4+ with custom Stripe-inspired design system
+- **UI Library**: shadcn/ui (Radix UI primitives)
+- **Authentication**: NextAuth.js v4 with MongoDB adapter
+- **Database**: MongoDB with Mongoose
+- **Payments**: Stripe
+- **Real-time**: Socket.IO
+- **Forms**: React Hook Form + Zod validation
+- **State Management**: Zustand
+- **Internationalization**: next-intl
+- **Images**: next-cloudinary
+
+## Code Style & Conventions
+
+### General Rules
+- Always use TypeScript with strict typing
+- Prefer functional components with React hooks
+- Use `"use client"` directive only when necessary (client components)
+- Use async/await for asynchronous operations
+- Always handle errors with try-catch blocks
+- Use meaningful variable and function names
+
+### File Naming
+- Components: PascalCase (e.g., `FlightSearch.tsx`, `UserAvatar.tsx`)
+- Utilities/Hooks: camelCase (e.g., `useScrollAnimation.ts`, `formatDate.ts`)
+- API Routes: kebab-case (e.g., `create-booking.ts`)
+- Pages: kebab-case (e.g., `ticket-details/page.tsx`)
+
+### Component Structure
+```typescript
+"use client"; // Only if needed
+
+import React from "react";
+import { ComponentProps } from "@/types"; // Type imports first
+import { Button } from "@/components/ui/button"; // UI components
+import { cn } from "@/lib/utils"; // Utilities last
+
+interface ComponentNameProps {
+  // Props definition
+}
+
+const ComponentName = ({ prop1, prop2 }: ComponentNameProps) => {
+  // Hooks at the top
+  // State declarations
+  // Event handlers
+  // Effects
+
+  return (
+    <div className="...">
+      {/* Component JSX */}
+    </div>
+  );
+};
+
+export default ComponentName;
+```
+
+### Import Order
+1. React and Next.js imports
+2. Third-party libraries
+3. Type imports
+4. UI components from `@/components/ui`
+5. Custom components
+6. Utils, hooks, and lib functions
+7. Types and constants
+
+### TypeScript Guidelines
+- Always define interfaces for component props
+- Use `type` for unions and `interface` for object shapes
+- Avoid `any` - use `unknown` or proper typing
+- Export types/interfaces when used across files
+- Use optional chaining (`?.`) and nullish coalescing (`??`)
+
+## Design System
+
+### Colors
+- Use CSS variables via Tailwind: `bg-primary`, `text-foreground`, etc.
+- Custom Stripe-inspired colors available: `stripe-purple`, `stripe-blue-500`, etc.
+- Gray scale: `gray-50` to `gray-950`
+- Always support dark mode with appropriate color classes
+
+### Typography
+Use custom font size utilities:
+- Headings: `text-h1` to `text-h6`
+- Body: `text-body-lg`, `text-body`, `text-body-sm`
+- Display: `text-display`
+- Caption: `text-caption`
+
+### Spacing
+Use custom spacing scale:
+- `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `3xl`, `4xl`, `5xl`, `6xl`
+
+### Border Radius
+- Prefer: `rounded-lg` (16px), `rounded-md` (12px), `rounded-xl` (24px)
+- Use `rounded-2xl` (32px) for large cards
+
+### Shadows
+Use Stripe-inspired shadows:
+- `shadow-stripe-sm`, `shadow-stripe-md`, `shadow-stripe-lg`, `shadow-stripe-xl`
+
+### Button Animations
+- Use `hover:-translate-y-0.5` for lift effect
+- Add `will-change-transform` for performance
+- Use `active:translate-y-0` for press effect
+
+## Component Patterns
+
+### Buttons
+```typescript
+import { Button } from "@/components/ui/button";
+
+<Button variant="default" size="lg">
+  Click Me
+</Button>
+
+// Variants: default, destructive, outline, secondary, ghost, link
+// Sizes: default, sm, lg, icon
+```
+
+### Forms
+```typescript
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+
+const formSchema = z.object({
+  email: z.string().email(),
+});
+
+const MyForm = () => {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: { email: "" },
+  });
+
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    // Handle submission
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
+  );
+};
+```
+
+### Cards
+```typescript
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+<Card className="shadow-stripe-md rounded-xl">
+  <CardHeader>
+    <CardTitle>Title</CardTitle>
+    <CardDescription>Description</CardDescription>
+  </CardHeader>
+  <CardContent>
+    {/* Content */}
+  </CardContent>
+</Card>
+```
+
+### Dialogs/Modals
+```typescript
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+
+<Dialog>
+  <DialogTrigger asChild>
+    <Button>Open Dialog</Button>
+  </DialogTrigger>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Dialog Title</DialogTitle>
+    </DialogHeader>
+    {/* Dialog content */}
+  </DialogContent>
+</Dialog>
+```
+
+## API Routes
+
+### Structure
+```typescript
+import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import dbConnect from "@/lib/mongodb";
+
+export async function GET(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    await dbConnect();
+
+    // Logic here
+
+    return NextResponse.json({ data: result });
+  } catch (error) {
+    console.error("Error:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+```
+
+### Error Handling
+Always return proper HTTP status codes:
+- 200: Success
+- 201: Created
+- 400: Bad Request
+- 401: Unauthorized
+- 403: Forbidden
+- 404: Not Found
+- 500: Internal Server Error
+
+## Authentication & Authorization
+
+### Protected Routes
+Use middleware for route protection based on user roles (admin, agent, client).
+
+### Session Access
+```typescript
+// Client-side
+import { useSession } from "next-auth/react";
+const { data: session, status } = useSession();
+
+// Server-side
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+const session = await getServerSession(authOptions);
+```
+
+### Role-Based Access
+Check `session.user.role` and `session.user.isApproved` for authorization.
+
+## Database (MongoDB + Mongoose)
+
+### Model Definition
+```typescript
+import mongoose from "mongoose";
+
+const Schema = new mongoose.Schema({
+  field: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+});
+
+export default mongoose.models.ModelName || mongoose.model("ModelName", Schema);
+```
+
+### Always use `dbConnect()` before database operations
+
+## Internationalization (next-intl)
+
+### Using Translations
+```typescript
+import { useTranslations } from "next-intl";
+
+const Component = () => {
+  const t = useTranslations("namespace");
+
+  return <h1>{t("key")}</h1>;
+};
+```
+
+## State Management
+
+### Zustand Store Pattern
+```typescript
+import { create } from "zustand";
+
+interface StoreState {
+  value: string;
+  setValue: (value: string) => void;
+}
+
+export const useStore = create<StoreState>((set) => ({
+  value: "",
+  setValue: (value) => set({ value }),
+}));
+```
+
+## Performance Optimization
+
+- Use React.memo() for expensive components
+- Implement proper loading states with Skeleton components
+- Use next/image for all images
+- Lazy load heavy components with dynamic imports
+- Use server components by default, only add "use client" when necessary
+
+## Accessibility
+
+- Always include proper ARIA labels
+- Ensure keyboard navigation works
+- Use semantic HTML elements
+- Maintain proper color contrast ratios
+- Add alt text to all images
+
+## Testing & Validation
+
+- Use Zod for all form validations
+- Validate API inputs server-side
+- Always sanitize user inputs
+- Use TypeScript strict mode
+
+## Styling Guidelines
+
+### Layout
+```typescript
+// Container pattern
+<div className="container mx-auto px-4 py-8 max-w-7xl">
+  {/* Content */}
+</div>
+
+// Flex layouts
+<div className="flex items-center justify-between gap-4">
+  {/* Items */}
+</div>
+
+// Grid layouts
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {/* Cards */}
+</div>
+```
+
+### Responsive Design
+- Mobile-first approach
+- Breakpoints: `sm:`, `md:`, `lg:`, `xl:`, `2xl:`, and custom `xs:`
+- Always test on multiple screen sizes
+
+### Dark Mode
+```typescript
+// Use Tailwind dark mode classes
+<div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+  {/* Content adapts to theme */}
+</div>
+```
+
+## Common Utilities
+
+### cn() for Class Names
+```typescript
+import { cn } from "@/lib/utils";
+
+<div className={cn("base-class", conditional && "conditional-class", className)} />
+```
+
+### Date Formatting
+```typescript
+import { format } from "date-fns";
+
+const formatted = format(new Date(), "PPP");
+```
+
+## Error Handling UI
+
+- Use toast notifications for user feedback
+- Display meaningful error messages
+- Implement error boundaries for crash recovery
+- Log errors appropriately (console.error)
+
+## Security Best Practices
+
+### Environment Variables & Secrets
+- **NEVER** hardcode API keys, secrets, or credentials
+- Use `.env.local` for local development (gitignored)
+- Access via `process.env.VARIABLE_NAME` in server-side code ONLY
+- Never expose environment variables to client components
+- Validate all required env vars at build time
+
+### Input Validation & Sanitization
+```typescript
+// Always validate with Zod
+import { z } from "zod";
+
+const schema = z.object({
+  email: z.string().email(),
+  name: z.string().min(2).max(100),
+  age: z.number().int().positive(),
+});
+
+// In API routes
+const result = schema.safeParse(data);
+if (!result.success) {
+  return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+}
+```
+
+### SQL/NoSQL Injection Prevention
+- Use Mongoose schemas with proper types
+- Never concatenate user input into queries
+- Use parameterized queries
+- Validate ObjectIds before queries
+
+### XSS Prevention
+- React automatically escapes JSX
+- Sanitize HTML if using `dangerouslySetInnerHTML` (avoid if possible)
+- Validate and sanitize all user inputs
+- Use Content Security Policy headers
+
+### Authentication & Authorization
+```typescript
+// Always check authentication
+const session = await getServerSession(authOptions);
+if (!session) {
+  return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+}
+
+// Always check authorization
+if (session.user.role !== "admin") {
+  return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+}
+
+// For agents, check approval status
+if (session.user.role === "agent" && !session.user.isApproved) {
+  return NextResponse.json({ error: "Pending approval" }, { status: 403 });
+}
+```
+
+### Password Security
+```typescript
+import bcrypt from "bcryptjs";
+
+// Hashing (registration)
+const hashedPassword = await bcrypt.hash(password, 12);
+
+// Verification (login)
+const isValid = await bcrypt.compare(password, user.hashedPassword);
+```
+
+### File Upload Security
+```typescript
+// Validate file types
+const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+if (!allowedTypes.includes(file.type)) {
+  throw new Error("Invalid file type");
+}
+
+// Validate file size
+const maxSize = 5 * 1024 * 1024; // 5MB
+if (file.size > maxSize) {
+  throw new Error("File too large");
+}
+
+// Use secure upload service (Cloudinary)
+// Never store files directly in public directory without validation
+```
+
+### Rate Limiting
+```typescript
+// Implement for sensitive endpoints
+// Consider using libraries like express-rate-limit or custom Redis-based solutions
+// Protect login, registration, password reset endpoints
+```
+
+### Error Handling Security
+```typescript
+// DON'T expose internal details
+// ❌ BAD
+return NextResponse.json({ error: error.message }, { status: 500 });
+
+// ✅ GOOD
+console.error("Database error:", error); // Log for debugging
+return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+```
+
+### Session Security
+- NextAuth handles secure session tokens
+- Tokens are httpOnly cookies (protected from XSS)
+- Use secure: true in production
+- Set appropriate maxAge for sessions
+
+### HTTPS & Production Security
+- Always use HTTPS in production
+- Set secure headers (HSTS, CSP, X-Frame-Options)
+- Configure proper CORS policies
+- Keep dependencies updated
+
+## File Organization
+
+```
+app/
+  (root)/          # Main app routes
+  auth/            # Authentication pages
+  admin/           # Admin dashboard
+  agent/           # Agent dashboard
+  client/          # Client dashboard
+  api/             # API routes
+components/
+  ui/              # shadcn/ui components
+  admin/           # Admin-specific components
+  agent/           # Agent-specific components
+  custom ui/       # Custom reusable components
+lib/               # Utility functions and configs
+hooks/             # Custom React hooks
+types/             # TypeScript type definitions
+public/            # Static assets
+```
+
+## Performance Checklist
+
+- [ ] Images optimized with next/image
+- [ ] Components are server components by default
+- [ ] API routes have proper error handling
+- [ ] Database queries are optimized
+- [ ] Loading states implemented
+- [ ] Error states handled gracefully
+
+## Commit Message Style
+
+Follow semantic commit format:
+- `feat:` New feature
+- `fix:` Bug fix
+- `refactor:` Code refactoring
+- `style:` UI/style changes
+- `docs:` Documentation
+- `chore:` Maintenance tasks
+
+## Final Reminders
+
+1. **Consistency is key** - Follow existing patterns in the codebase
+2. **Mobile-first** - Always design for mobile, then enhance for desktop
+3. **Accessibility** - Make it usable for everyone
+4. **Performance** - Keep it fast
+5. **Type safety** - Use TypeScript properly
+6. **User experience** - Smooth animations, clear feedback, intuitive UI
+7. **Dark mode** - Always support both themes
+8. **Internationalization** - Use next-intl for all user-facing text

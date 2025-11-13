@@ -1,0 +1,895 @@
+{
+  "common": {
+    "home": "Home",
+    "about": "About Us",
+    "services": "Services",
+    "messages": "Messages",
+    "profile": "Profile",
+    "signOut": "Sign Out",
+    "signIn": "Sign In",
+    "dashboard": {
+      "admin": "Admin Dashboard",
+      "agent": "Agent Dashboard",
+      "user": "User Dashboard"
+    }
+  },
+  "flightSearch": {
+    "title": "Search flights",
+    "returnFlight": "Return flight",
+    "nonStop": "Non-stop flights only",
+    "departure": "Departure",
+    "arrival": "Arrival",
+    "passengers": "Passenger(s)",
+    "adults": "Adults",
+    "children": "Children",
+    "infants": "Infants",
+    "adultsAge": "12+ years",
+    "childrenAge": "2-11 years",
+    "infantsAge": "Under 2 years",
+    "travelClass": "Travel Class",
+    "searchButton": "Search flights",
+    "selectPassengers": "Select number of passengers",
+    "error": {
+      "title": "Error",
+      "searchAirports": "An error occurred while searching for airports. Please try again later."
+    },
+    "datePicker": {
+      "pickDate": "Pick a date",
+      "months": {
+        "january": "January",
+        "february": "February",
+        "march": "March",
+        "april": "April",
+        "may": "May",
+        "june": "June",
+        "july": "July",
+        "august": "August",
+        "september": "September",
+        "october": "October",
+        "november": "November",
+        "december": "December"
+      },
+      "days": {
+        "sun": "Sun",
+        "mon": "Mon",
+        "tue": "Tue",
+        "wed": "Wed",
+        "thu": "Thu",
+        "fri": "Fri",
+        "sat": "Sat"
+      }
+    }
+  },
+  "footer": {
+    "quickLinks": "Quick Links",
+    "home": "Home",
+    "about": "About Us",
+    "support": "Support",
+    "getInTouch": "Get In Touch",
+    "followUs": "Follow Us",
+    "searchFlights": "Search Flights",
+    "ourServices": "Our Services",
+    "helpCenter": "Help Center",
+    "faqs": "FAQs",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "allRightsReserved": "All rights reserved",
+    "sitemap": "Sitemap",
+    "accessibility": "Accessibility",
+    "cookieSettings": "Cookie Settings",
+    "tagline": "Your trusted partner for seamless flight bookings and unforgettable travel experiences around the world."
+  },
+  "languages": {
+    "en": "English",
+    "it": "Italian",
+    "si": "Sinhala"
+  },
+  "auth": {
+    "signin": {
+      "title": "Welcome Back",
+      "description": "Sign in to your account to continue",
+      "form": {
+        "email": {
+          "label": "Email",
+          "placeholder": "Enter your email"
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "Enter your password",
+          "forgot": "Forgot password?"
+        }
+      },
+      "button": {
+        "submit": "Sign In",
+        "loading": "Signing in..."
+      },
+      "link": {
+        "signup": {
+          "prompt": "Don't have an account?",
+          "text": "Sign up"
+        }
+      },
+      "loading": "Loading...",
+      "error": {
+        "noAccount": {
+          "title": "No account found with this email address.",
+          "description": "Please create a new account or check your email spelling."
+        },
+        "incorrectPassword": {
+          "title": "The password you entered is incorrect.",
+          "description": "Please try again or reset your password."
+        },
+        "unverifiedEmail": {
+          "title": "Your email address has not been verified.",
+          "description": "Check your inbox and click the verification link."
+        },
+        "pendingApproval": {
+          "title": "Your account is pending approval.",
+          "description": "Please wait for admin approval before signing in."
+        },
+        "missingFields": {
+          "title": "Please enter both email and password.",
+          "description": "Fill in all required fields."
+        },
+        "generic": {
+          "title": "Sign in failed.",
+          "description": "Please check your credentials and try again."
+        }
+      },
+      "success": {
+        "title": "Success",
+        "description": "Signed in successfully!"
+      }
+    },
+    "signup": {
+      "title": "Create Account",
+      "description": "Join us to book your next flight",
+      "form": {
+        "name": {
+          "label": "Full Name",
+          "placeholder": "Enter your full name"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "Enter your email"
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "Enter your password"
+        },
+        "passwordStrength": {
+          "label": "Password Strength:",
+          "weak": "Weak",
+          "fair": "Fair",
+          "good": "Good",
+          "strong": "Strong"
+        },
+        "passwordValidation": {
+          "heading": "Validation Requirements",
+          "success": "Password meets security requirements"
+        },
+        "passwordSuggestion": {
+          "heading": "Suggested Strong Password:",
+          "button": "Use This"
+        },
+        "confirmPassword": {
+          "label": "Confirm Password",
+          "placeholder": "Confirm your password",
+          "match": "Passwords match",
+          "mismatch": "Passwords don't match"
+        },
+        "role": {
+          "label": "Account Type",
+          "client": {
+            "label": "Client",
+            "description": "Book flights for personal use"
+          },
+          "agent": {
+            "label": "Agent",
+            "description": "Manage bookings for clients (requires approval)"
+          }
+        }
+      },
+      "button": {
+        "submit": "Create Account",
+        "loading": "Creating your account..."
+      },
+      "link": {
+        "signin": {
+          "prompt": "Already have an account?",
+          "text": "Sign in"
+        }
+      },
+      "success": {
+        "title": "Registration Successful!",
+        "description": "Your account has been created",
+        "email": {
+          "verify": "Please verify your email",
+          "sent": "A verification link has been sent to your email",
+          "spam": "Didn't receive the email? Check your spam folder"
+        },
+        "button": "Continue to Sign In",
+        "passwordApplied": {
+          "title": "Password Applied",
+          "description": "Strong password has been set. Remember to save it!"
+        }
+      },
+      "error": {
+        "weakPassword": {
+          "title": "Weak Password",
+          "description": "Please use a stronger password. Check the suggestions below."
+        },
+        "passwordMismatch": {
+          "title": "Error",
+          "description": "Passwords do not match"
+        },
+        "registrationFailed": {
+          "title": "Error",
+          "description": "Registration failed"
+        },
+        "generic": {
+          "title": "Error",
+          "description": "An unexpected error occurred"
+        }
+      }
+    }
+  },
+  "booking": {
+    "section": {
+      "flight": "Selected Flight",
+      "passenger": "Passenger Details"
+    },
+    "passenger": {
+      "count": "{current} of {total} passengers added",
+      "addMore": "Add {count} More Passenger(s)"
+    },
+    "progress": {
+      "label": "Progress"
+    },
+    "button": {
+      "addPassenger": "Add Passenger {number}",
+      "checkingAvailability": "Checking Availability...",
+      "processingPayment": "Processing Payment...",
+      "available": "Available",
+      "proceedPayment": "Proceed to Payment",
+      "goBackToFlights": "Go Back to Flight Search",
+      "checkAvailabilityProceed": "Check Availability & Proceed"
+    },
+    "badges": {
+      "child": "Child",
+      "infant": "Infant"
+    },
+    "countdown": {
+      "label": "Time remaining:"
+    },
+    "toast": {
+      "removed": {
+        "title": "Passenger Removed",
+        "description": "The passenger has been removed successfully."
+      },
+      "maxReached": {
+        "title": "Maximum Reached",
+        "description": "You can only add up to {count} passengers."
+      },
+      "missingPassengers": {
+        "title": "Error",
+        "description": "Please add details for all {count} passengers."
+      },
+      "noFlight": {
+        "title": "Error",
+        "description": "No flight selected"
+      },
+      "availabilityExpired": {
+        "title": "Availability Expired",
+        "description": "Please check availability again before proceeding to payment."
+      },
+      "unavailable": {
+        "title": "Flight Unavailable",
+        "description": "The selected flight is no longer available."
+      },
+      "failedBooking": {
+        "title": "Error",
+        "description": "Failed to create Amadeus booking"
+      },
+      "failedAvailability": {
+        "title": "Error",
+        "description": "Could not verify flight availability. Please try again."
+      }
+    },
+    "status": {
+      "rechecking": "Rechecking flight availability..."
+    },
+    "passengerForm": {
+      "fields": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "phoneNumber": "Phone Number",
+        "dateOfBirth": "Date of Birth",
+        "gender": "Gender",
+        "passportNumber": "Passport Number"
+      },
+      "placeholders": {
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john.doe@example.com",
+        "phoneNumber": "+1234567890",
+        "gender": "Select gender",
+        "passportNumber": "AB1234567"
+      },
+      "gender": {
+        "male": "Male",
+        "female": "Female"
+      },
+      "validation": {
+        "firstNameMin": "First name must be at least 2 characters",
+        "lastNameMin": "Last name must be at least 2 characters",
+        "emailInvalid": "Invalid email address",
+        "phoneMin": "Phone number must be at least 10 digits",
+        "passportMin": "Passport number must be at least 6 characters",
+        "infantAge": "Passenger must be under 2 years old for infant ticket",
+        "childAge": "Passenger must be between 2 and 12 years old for child ticket",
+        "adultAge": "Passenger must be 12 years or older for adult ticket"
+      },
+      "travelerType": {
+        "infant": "Infant Passenger (Under 2 years old)",
+        "child": "Child Passenger (2-12 years old)"
+      },
+      "toast": {
+        "error": "Error",
+        "success": "Success",
+        "ageValidationError": "Age Validation Error",
+        "noFlight": "No flight selected. Please select a flight first.",
+        "updated": "Passenger details updated successfully!",
+        "added": "Passenger added successfully!",
+        "failedSave": "Failed to save passenger details"
+      },
+      "button": {
+        "update": "Update Passenger",
+        "add": "Add Passenger"
+      }
+    },
+    "flightCard": {
+      "returnFlight": "Return Flight",
+      "departureFlight": "Departure Flight",
+      "nonStop": "Non-stop",
+      "stops": "{count} stop{count, plural, one {} other {s}}",
+      "noFlight": "No flight selected",
+      "selectFlight": "Please select a flight to view details",
+      "browseFlights": "Browse Flights",
+      "roundTrip": "Round Trip Flight",
+      "oneWay": "One Way Flight",
+      "itineraryDetails": "Flight itinerary details",
+      "totalFare": "Total fare for all passengers",
+      "passengers": "{count} Passenger{count, plural, one {} other {s}}",
+      "adults": "{count} Adult{count, plural, one {} other {s}}",
+      "children": "{count} Child{count, plural, one {} other {ren}}",
+      "infants": "{count} Infant{count, plural, one {} other {s}}"
+    }
+  },
+  "about": {
+    "hero": {
+      "badge": "ABOUT US",
+      "title": "Your Journey is Our Priority",
+      "paragraph1": "Founded with a vision to revolutionize travel experiences, we combine cutting-edge technology with personalized service to create unforgettable journeys for our clients worldwide.",
+      "paragraph2": "With over 15 years of excellence in the travel industry, our team of dedicated professionals brings unmatched expertise in crafting bespoke travel solutions that exceed expectations.",
+      "paragraph3": "We believe travel is more than just a destination—it's about creating memories, fostering connections, and experiencing the world in ways that transform us.",
+      "award": {
+        "title": "Award Winning",
+        "subtitle": "Travel Agency 2024"
+      },
+      "stats": {
+        "years": "Years",
+        "travelers": "Travelers",
+        "destinations": "Destinations"
+      }
+    },
+    "principles": {
+      "badge": "OUR PRINCIPLES",
+      "title": "Our Guiding Principles",
+      "description": "The core values that drive everything we do",
+      "vision": {
+        "title": "Our Vision",
+        "content": "To become the world's most trusted travel partner, connecting people to extraordinary experiences and fostering a global community of passionate travelers who value authenticity and adventure."
+      },
+      "mission": {
+        "title": "Our Mission",
+        "content": "Delivering exceptional, personalized travel experiences through innovative solutions, expert guidance, and unwavering commitment to customer satisfaction at every step of the journey."
+      }
+    },
+    "team": {
+      "badge": "LEADERSHIP",
+      "title": "Our Dedicated Team",
+      "description": "Led by experienced professionals committed to excellence in every aspect of travel services",
+      "leader": {
+        "name": "Mr. Jhon Doe",
+        "title": "Founder & CEO",
+        "credentials": "IATA (sub Captain CAAC)",
+        "description1": "With over 15 years of distinguished experience in the travel and aviation industry, Mr. Jhon Doe has built an exceptional reputation for delivering world-class travel solutions and fostering lasting relationships with clients worldwide.",
+        "description2": "His expertise spans strategic planning, operations management, and customer relations, making him a respected leader in the field. Under his visionary leadership, the company has achieved remarkable growth and recognition.",
+        "description3": "Committed to excellence and innovation, Mr. Jhon Doe has established strategic partnerships with major airlines and expanded services globally, ensuring clients receive unparalleled travel experiences tailored to their unique needs.",
+        "badge1": "IATA Certified",
+        "badge2": "15+ Years Experience"
+      }
+    },
+    "staff": {
+      "badge": "WHO WE ARE",
+      "title": "Our Expert Staff",
+      "description": "Passionate professionals dedicated to your journey",
+      "members": {
+        "1": {
+          "title": "Professionally Trained Agents",
+          "description": "Our team receives ongoing training and stays up-to-date with the latest industry trends, ensuring expert guidance for your travels."
+        },
+        "2": {
+          "title": "Certified Ticketing Specialists",
+          "description": "Passionate about creating tailor-made travel solutions, we put our utmost effort into making your dream vacation a reality."
+        },
+        "3": {
+          "title": "Experienced Travel Consultants",
+          "description": "With years of experience and deep knowledge of global destinations, we provide expert advice for your dream trip plans."
+        },
+        "4": {
+          "title": "Dedicated Support Team",
+          "description": "Our professionals deliver outstanding service with a commitment to excellence. We always deliver what we promise."
+        }
+      }
+    },
+    "partners": {
+      "badge": "TRUSTED PARTNERSHIPS",
+      "title": "Our Premium Travel Partners",
+      "description": "Collaborating with the world's leading airlines to bring you exceptional travel experiences and unbeatable value",
+      "trustBadge": "Trusted partnerships with",
+      "trustBadgeHighlight": "50+ premium airlines",
+      "trustBadgeSuffix": "worldwide"
+    },
+    "benefits": {
+      "badge": "WHY CHOOSE US",
+      "title": "The Benefits of Choosing Us",
+      "description": "Experience the difference with our comprehensive travel services tailored to your needs",
+      "items": {
+        "1": {
+          "title": "Local Expertise, Global Reach",
+          "description": "As a boutique travel agency, we offer personalized service combined with access to worldwide destinations and competitive prices."
+        },
+        "2": {
+          "title": "Personalized Assistance",
+          "description": "Our dedicated team provides one-on-one support to ensure every detail of your trip aligns with your preferences and budget."
+        },
+        "3": {
+          "title": "Around-the-Clock Support",
+          "description": "We are available 24/7 to assist you throughout your journey, providing peace of mind wherever you travel."
+        },
+        "4": {
+          "title": "Comprehensive Travel Services",
+          "description": "From flights and hotels to tours and activities, we handle every aspect to create seamless travel experiences."
+        },
+        "5": {
+          "title": "Exclusive Offers & Deals",
+          "description": "Access special promotions and exclusive packages not available elsewhere, maximizing value for your money."
+        },
+        "6": {
+          "title": "Reliable Partnerships",
+          "description": "We work with trusted airlines, hotels, and tour operators to guarantee quality throughout your experience."
+        }
+      }
+    },
+    "testimonials": {
+      "badge": "STORIES FROM OUR CLIENTS",
+      "title": "Hear From Our Happy Customers",
+      "description": "Real experiences from travelers who trusted us with their journeys",
+      "reviews": {
+        "1": {
+          "name": "Sarah M.",
+          "role": "Verified Traveler",
+          "comment": "Exceptional service that made our honeymoon truly unforgettable. The attention to detail was outstanding!"
+        },
+        "2": {
+          "name": "John Cooper",
+          "role": "Business Traveler",
+          "comment": "Professional team that really understands the needs of business travelers. Highly efficient!"
+        },
+        "3": {
+          "name": "Nelson Brat",
+          "role": "Adventure Seeker",
+          "comment": "Best travel agency I've worked with. They found amazing deals I couldn't find elsewhere!"
+        },
+        "4": {
+          "name": "Esther Smith",
+          "role": "Family Traveler",
+          "comment": "Amazing experience from start to finish. Perfect for families! Will definitely use again."
+        }
+      },
+      "stats": {
+        "rating": "Average Rating",
+        "clients": "Happy Clients",
+        "satisfaction": "Satisfaction Rate",
+        "support": "Support Available"
+      }
+    },
+    "contact": {
+      "badge": "GET IN TOUCH",
+      "title": "We'd Love to Hear from You",
+      "description": "Have a question or ready to start planning your next adventure? Our team is here to help make your travel dreams a reality.",
+      "email": "Email Us",
+      "phone": "Call Us",
+      "visit": "Visit Us"
+    }
+  },
+  "services": {
+    "hero": {
+      "badge": "OUR SERVICES",
+      "title": "Your Journey is Our Priority",
+      "paragraph1": "Welcome to our comprehensive travel services designed to make your journey seamless and unforgettable. From flight bookings to visa assistance, we're your one-stop solution for all travel needs.",
+      "paragraph2": "With partnerships across the globe and decades of industry expertise, we deliver personalized service that transforms how you experience travel. Every detail matters, and we ensure excellence at every step.",
+      "paragraph3": "Whether you're planning a family vacation, business trip, or dream destination wedding, our dedicated team works tirelessly to exceed your expectations and create memories that last a lifetime.",
+      "cta": "Get Started Today"
+    },
+    "grid": {
+      "badge": "OUR SERVICES",
+      "title": "Comprehensive Travel Solutions",
+      "description": "From flights and visas to cruises and group travel, we handle every aspect of your journey"
+    },
+    "card": {
+      "popular": "Popular",
+      "keyBenefits": "Key Benefits",
+      "additionalServices": "Additional Services"
+    },
+    "items": {
+      "1": {
+        "title": "Flight Bookings",
+        "description": "Access competitive fares and flexible booking options for domestic and international flights.",
+        "mainBenefits": {
+          "1": "Best price guarantee on all flights",
+          "2": "Flexible booking and cancellation policies",
+          "3": "Multi-city and round-trip options"
+        },
+        "extraPerks": {
+          "1": "Real-time flight status updates",
+          "2": "Seat selection assistance",
+          "3": "Special meal requests handling",
+          "4": "Travel insurance options"
+        }
+      },
+      "2": {
+        "title": "Visa Services",
+        "description": "Expert assistance with visa applications and documentation for hassle-free international travel.",
+        "mainBenefits": {
+          "1": "Complete visa application support",
+          "2": "Document verification and preparation",
+          "3": "Fast-track processing available"
+        },
+        "extraPerks": {
+          "1": "Tourist visa assistance",
+          "2": "Business visa support",
+          "3": "Student visa guidance",
+          "4": "Transit visa help",
+          "5": "Visa extension services"
+        }
+      },
+      "3": {
+        "title": "Hotel Reservations",
+        "description": "Book from thousands of hotels worldwide, from budget-friendly to luxury accommodations.",
+        "mainBenefits": {
+          "1": "Access to exclusive hotel deals",
+          "2": "Wide range of accommodation options",
+          "3": "Verified guest reviews and ratings"
+        },
+        "extraPerks": {
+          "1": "Free cancellation on select hotels",
+          "2": "Loyalty program benefits",
+          "3": "Room upgrade possibilities",
+          "4": "Special requests coordination"
+        }
+      },
+      "4": {
+        "title": "Vacation Packages",
+        "description": "Carefully curated travel packages combining flights, hotels, and experiences for the perfect getaway.",
+        "mainBenefits": {
+          "1": "All-inclusive packages for worry-free travel",
+          "2": "Customizable itineraries to match your style",
+          "3": "Family-friendly and romantic options",
+          "4": "Group travel discounts available",
+          "5": "Local experiences and guided tours included",
+          "6": "Best value for money combinations"
+        }
+      },
+      "5": {
+        "title": "Travel Insurance",
+        "description": "Protect your investment with comprehensive travel insurance covering medical emergencies, cancellations, and more.",
+        "mainBenefits": {
+          "1": "Trip cancellation and interruption coverage",
+          "2": "Medical emergency assistance worldwide",
+          "3": "Lost baggage protection"
+        },
+        "extraPerks": {
+          "1": "Emergency evacuation coverage",
+          "2": "24/7 travel assistance hotline",
+          "3": "Flight delay compensation",
+          "4": "Personal liability protection",
+          "5": "Adventure sports coverage options",
+          "6": "COVID-19 related coverage",
+          "7": "Pre-existing condition waivers",
+          "8": "Cancel for any reason upgrades"
+        }
+      },
+      "6": {
+        "title": "Cruise Bookings",
+        "description": "Explore the world by sea with our extensive cruise options featuring luxury amenities and exotic destinations.",
+        "mainBenefits": {
+          "1": "Access to major cruise lines worldwide",
+          "2": "Cabin selection and upgrade assistance",
+          "3": "Shore excursion planning"
+        },
+        "extraPerks": {
+          "1": "Mediterranean cruise packages",
+          "2": "Caribbean getaway cruises",
+          "3": "Alaska and Northern routes",
+          "4": "Asian and Pacific cruises"
+        }
+      },
+      "7": {
+        "title": "Destination Specialists",
+        "description": "Our team includes destination experts who provide insider knowledge and personalized recommendations for your chosen location.",
+        "mainBenefits": {
+          "1": "Expert destination knowledge and insights",
+          "2": "Custom itinerary planning services",
+          "3": "Local hidden gems and recommendations"
+        },
+        "extraPerks": {
+          "1": "Restaurant and dining reservations",
+          "2": "Event and attraction ticket booking",
+          "3": "Local transportation arrangements",
+          "4": "Cultural experience coordination"
+        }
+      },
+      "8": {
+        "title": "Group Travel",
+        "description": "Specialized services for group bookings including corporate events, family reunions, and special celebrations.",
+        "mainBenefits": {
+          "1": "Dedicated group travel coordinator",
+          "2": "Special group rates and discounts",
+          "3": "Customized group packages"
+        },
+        "extraPerks": {
+          "1": "Corporate retreat planning",
+          "2": "Destination wedding arrangements",
+          "3": "Family reunion coordination",
+          "4": "Sports team travel management"
+        }
+      }
+    },
+    "destinations": {
+      "badge": "POPULAR DESTINATIONS",
+      "title": "Explore Amazing Destinations",
+      "description": "Discover the world's most captivating locations with our expert guidance and tailored packages",
+      "exploreNow": "Explore Now",
+      "viewAll": "View All Destinations",
+      "locations": {
+        "1": {
+          "name": "Berlin",
+          "category": "Cultural",
+          "description": "Historic landmarks and vibrant culture"
+        },
+        "2": {
+          "name": "Kazakhstan",
+          "category": "Asia",
+          "description": "Modern cities and stunning landscapes"
+        },
+        "3": {
+          "name": "Saudi Arabia",
+          "category": "Middle East",
+          "description": "Ancient heritage and modern marvels"
+        },
+        "4": {
+          "name": "Hong Kong",
+          "category": "Asia",
+          "description": "Skyline views and culinary delights"
+        },
+        "5": {
+          "name": "Brazil",
+          "category": "America",
+          "description": "Beaches, rainforests, and carnival"
+        },
+        "6": {
+          "name": "Dubai",
+          "category": "Middle East",
+          "description": "Luxury shopping and ultramodern architecture"
+        }
+      }
+    }
+  },
+  "home": {
+    "offers": {
+      "badge": "SPECIAL OFFERS",
+      "title": "Amazing Flight Deals",
+      "description": "Don't miss out on these amazing flight deals and discounts",
+      "expires": "Expires",
+      "loadMore": "Load more offers",
+      "bookNow": "Book Now"
+    },
+    "travelTips": {
+      "badge": "TRAVEL TIPS",
+      "title": "Expert Travel Advice",
+      "description": "Get the most out of your trip with our expert travel tips",
+      "tips": {
+        "packLight": {
+          "title": "Pack Light",
+          "description": "Avoid overpacking by sticking to the essentials. This will make your travel experience more comfortable and convenient."
+        },
+        "exploreLocally": {
+          "title": "Explore Locally",
+          "description": "Immerse yourself in the local culture by visiting off-the-beaten-path destinations and interacting with locals."
+        },
+        "beFlexible": {
+          "title": "Be Flexible",
+          "description": "Leave room for spontaneity and be open to changing your plans. This will allow you to discover unexpected adventures."
+        }
+      }
+    },
+    "testimonials": {
+      "badge": "TESTIMONIALS",
+      "title": "What Our Users Are Saying",
+      "description": "Discover how our platform has enhanced the travel planning experience",
+      "reviews": {
+        "0": {
+          "name": "John Doe",
+          "location": "New York, USA",
+          "time": "1 week ago",
+          "comment": "Booking my flights was seamless. The intuitive interface made the process straightforward and enjoyable!"
+        },
+        "1": {
+          "name": "Jane Smith",
+          "location": "London, UK",
+          "time": "2 weeks ago",
+          "comment": "The site provided a broad range of options. It was easy to navigate, and customer support was prompt."
+        },
+        "2": {
+          "name": "Michael Chen",
+          "location": "Sydney, Australia",
+          "time": "3 weeks ago",
+          "comment": "A user-friendly and reliable service with excellent search and booking options. Highly recommend!"
+        }
+      }
+    }
+  },
+  "flights": {
+    "modifySearch": "Modify Search",
+    "loader": {
+      "error": {
+        "unexpected": "An unexpected error occurred while fetching flights",
+        "noParams": "No search parameters provided",
+        "noData": "No flights data available"
+      }
+    },
+    "sidebar": {
+      "title": "Flight Filters",
+      "resultsCount": "{count} flights found",
+      "clearAll": "Clear All",
+      "priceRange": "Price Range",
+      "budgetUpTo": "Budget up to ${price}",
+      "flightStops": "Flight Stops",
+      "stops": {
+        "any": "Any number of stops",
+        "direct": "Direct flights only",
+        "oneMax": "1 stop maximum",
+        "twoPlus": "2+ stops allowed"
+      },
+      "preferredAirline": "Preferred Airline",
+      "chooseAirline": "Choose your preferred airline",
+      "anyAirline": "Any airline",
+      "filteringBy": "Filtering by",
+      "updatingFilters": "Updating filters..."
+    },
+    "list": {
+      "heading": "Flight Search Results",
+      "toggleFilters": "Toggle Filters",
+      "noResults": "No Results Were Found For The Provided Search Criteria!"
+    },
+    "card": {
+      "departure": "Departure",
+      "return": "Return",
+      "direct": "Direct",
+      "stops": "{count} Stops",
+      "baggageIncluded": "Checked baggage included!",
+      "noBaggage": "No baggage included!"
+    }
+  },
+  "ticketDetails": {
+    "noFlightSelected": "No flight selected",
+    "returnToSearch": "Return to flight search",
+    "priceBreakdown": "Price Breakdown",
+    "perPassengerPricing": "Per passenger pricing details",
+    "adult": "Adult",
+    "child": "Child",
+    "infant": "Infant",
+    "perPerson": "Per person",
+    "totalAmount": "Total Amount",
+    "allPassengersIncluded": "All passengers included",
+    "continueToBooking": "Continue to Booking",
+    "itinerary": {
+      "departure": "Departure",
+      "return": "Return",
+      "directFlight": "Direct flight",
+      "stops": "{count} stop{count, plural, one {} other {s}}",
+      "baggageIncluded": "Checked baggage included!",
+      "noBaggage": "No baggage included!"
+    },
+    "footer": {
+      "travelRules": "Travel rules may apply",
+      "connectionProtected": "Connection protected",
+      "hideDetails": "Hide details",
+      "hide": "Hide",
+      "showDetails": "Show details",
+      "details": "Details"
+    },
+    "stopover": {
+      "duration": "Stopover duration",
+      "changingAirlines": "Changing airlines",
+      "stopoverAt": "Stopover at",
+      "airport": "Airport"
+    },
+    "leg": {
+      "noBaggageInfo": "No baggage info"
+    },
+    "fareRules": {
+      "title": "Fare Rules",
+      "loading": "Loading fare rules...",
+      "unableToLoad": "Unable to load fare rules",
+      "segment": "Segment",
+      "noRulesAvailable": "No fare rules available",
+      "noRulesFound": "Fare rules data not found for this flight."
+    }
+  },
+  "searchFlight": {
+    "returnFlight": "Return flight",
+    "travelClass": "Travel Class",
+    "any": "ANY",
+    "economy": "Economy",
+    "premiumEconomy": "Premium Economy",
+    "business": "Business",
+    "first": "First",
+    "passengers": "Passengers",
+    "pax": "Pax",
+    "selectPassengers": "Select number of passengers",
+    "adults": "Adults",
+    "adultsAge": "12+ years",
+    "children": "Children",
+    "childrenAge": "2-11 years",
+    "infants": "Infants",
+    "infantsAge": "Under 2 years",
+    "searchFlights": "Search Flights"
+  },
+  "airportSearch": {
+    "departure": "Departure",
+    "arrival": "Arrival",
+    "noResults": "No results found",
+    "searchFailed": "Failed to search airports"
+  },
+  "datePicker": {
+    "pickDate": "Pick a date",
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    },
+    "days": {
+      "sun": "Sun",
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat"
+    }
+  }
+}

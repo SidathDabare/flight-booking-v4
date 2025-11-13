@@ -1,0 +1,35 @@
+{
+  "timestamp": "2025-10-29T08:43:34.333Z",
+  "filesScanned": 173,
+  "issues": [
+    {
+      "severity": "warning",
+      "category": "UI Consistency",
+      "file": "app\\(root)\\about\\_components\\PartnersCarousel.tsx",
+      "message": "Multiple inline styles detected",
+      "recommendation": "Use Tailwind CSS classes instead of inline styles for better maintainability"
+    },
+    {
+      "severity": "warning",
+      "category": "UI Consistency",
+      "file": "components\\custom ui\\flight-search-main\\flight-search.tsx",
+      "message": "Multiple inline styles detected",
+      "recommendation": "Use Tailwind CSS classes instead of inline styles for better maintainability"
+    },
+    {
+      "severity": "warning",
+      "category": "UI Consistency",
+      "file": "components\\custom ui\\flights-hr-main-page\\search-hr.tsx",
+      "message": "Multiple inline styles detected",
+      "recommendation": "Use Tailwind CSS classes instead of inline styles for better maintainability"
+    }
+  ],
+  "summary": {
+    "critical": 0,
+    "warnings": 3,
+    "info": 0
+  },
+  "categories": {
+    "UI Consistency": 3
+  }
+}

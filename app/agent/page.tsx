@@ -1,0 +1,40 @@
+"use client";
+
+import { useSession } from "next-auth/react";
+import { AgentDashboardOverview } from "@/components/agent/agent-dashboard-overview";
+import { AgentSidebarTrigger } from "@/components/agent/agent-sidebar-trigger";
+import { Separator } from "@/components/ui/separator";
+
+export default function AgentDashboard() {
+  const { data: session, status } = useSession();
+
+  if (status === "loading") {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="text-lg">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!session || session.user.role !== "agent" || !session.user.isApproved) {
+    return null;
+  }
+
+  return (
+    <div className="flex flex-col">
+      <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+        <AgentSidebarTrigger className="-ml-1" />
+        <Separator orientation="vertical" className="mr-2 h-4" />
+        <h1 className="text-md font-semibold text-foreground">
+          Agent Dashboard
+        </h1>
+        <div className="ml-auto text-xs text-muted-foreground">
+          Welcome back, {session.user.name}!
+        </div>
+      </header>
+      <main className="flex-1 overflow-auto">
+        <AgentDashboardOverview agentId={session.user.id} />
+      </main>
+    </div>
+  );
+}

@@ -1,0 +1,43 @@
+
+> flight-booking-v1@0.1.0 dev
+> next dev --turbopack
+
+ ⚠ Port 3000 is in use, trying 3001 instead.
+ ⚠ Port 3001 is in use, trying 3002 instead.
+ ⚠ Port 3002 is in use, trying 3003 instead.
+   ▲ Next.js 15.1.4 (Turbopack)
+   - Local:        http://localhost:3003
+   - Network:      http://172.21.128.1:3003
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Compiled in 300ms
+ ✓ Ready in 1511ms
+ ○ Compiling /api/debug-orders ...
+ ✓ Compiled /api/debug-orders in 987ms
+[Error: EPERM: operation not permitted, open 'C:\Users\sidat\Desktop\Clude\flight-booking-v2-AI\.next\trace'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'open',
+  path: 'C:\\Users\\sidat\\Desktop\\Clude\\flight-booking-v2-AI\\.next\\trace'
+}
+ ⨯ uncaughtException: [Error: EPERM: operation not permitted, open 'C:\Users\sidat\Desktop\Clude\flight-booking-v2-AI\.next\trace'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'open',
+  path: 'C:\\Users\\sidat\\Desktop\\Clude\\flight-booking-v2-AI\\.next\\trace'
+}
+ ⨯ uncaughtException:  [Error: EPERM: operation not permitted, open 'C:\Users\sidat\Desktop\Clude\flight-booking-v2-AI\.next\trace'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'open',
+  path: 'C:\\Users\\sidat\\Desktop\\Clude\\flight-booking-v2-AI\\.next\\trace'
+}
+✅ Database connected
+📊 Found 3 orders
+ GET /api/debug-orders 200 in 2424ms
+ ✓ Compiled /api/admin/bookings in 448ms
+(node:19856) [MONGOOSE] Warning: Duplicate schema index on {"email":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ GET /api/admin/bookings?page=1 401 in 806ms
+[?25h

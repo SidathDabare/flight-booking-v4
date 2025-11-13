@@ -1,0 +1,895 @@
+{
+  "common": {
+    "home": "Home",
+    "about": "Chi Siamo",
+    "services": "Servizi",
+    "messages": "Messaggi",
+    "profile": "Profilo",
+    "signOut": "Esci",
+    "signIn": "Accedi",
+    "dashboard": {
+      "admin": "Dashboard Amministratore",
+      "agent": "Dashboard Agente",
+      "user": "Dashboard Utente"
+    }
+  },
+  "flightSearch": {
+    "title": "Cerca voli",
+    "returnFlight": "Volo di ritorno",
+    "nonStop": "Solo voli diretti",
+    "departure": "Partenza",
+    "arrival": "Arrivo",
+    "passengers": "Passeggero/i",
+    "adults": "Adulti",
+    "children": "Bambini",
+    "infants": "Neonati",
+    "adultsAge": "12+ anni",
+    "childrenAge": "2-11 anni",
+    "infantsAge": "Meno di 2 anni",
+    "travelClass": "Classe di Viaggio",
+    "searchButton": "Cerca voli",
+    "selectPassengers": "Seleziona il numero di passeggeri",
+    "error": {
+      "title": "Errore",
+      "searchAirports": "Si è verificato un errore durante la ricerca degli aeroporti. Riprova più tardi."
+    },
+    "datePicker": {
+      "pickDate": "Scegli una data",
+      "months": {
+        "january": "Gennaio",
+        "february": "Febbraio",
+        "march": "Marzo",
+        "april": "Aprile",
+        "may": "Maggio",
+        "june": "Giugno",
+        "july": "Luglio",
+        "august": "Agosto",
+        "september": "Settembre",
+        "october": "Ottobre",
+        "november": "Novembre",
+        "december": "Dicembre"
+      },
+      "days": {
+        "sun": "Dom",
+        "mon": "Lun",
+        "tue": "Mar",
+        "wed": "Mer",
+        "thu": "Gio",
+        "fri": "Ven",
+        "sat": "Sab"
+      }
+    }
+  },
+  "footer": {
+    "quickLinks": "Link Rapidi",
+    "home": "Home",
+    "about": "Chi Siamo",
+    "support": "Supporto",
+    "getInTouch": "Contattaci",
+    "followUs": "Seguici",
+    "searchFlights": "Cerca Voli",
+    "ourServices": "I Nostri Servizi",
+    "helpCenter": "Centro Assistenza",
+    "faqs": "Domande Frequenti",
+    "terms": "Termini di Servizio",
+    "privacy": "Privacy Policy",
+    "allRightsReserved": "Tutti i diritti riservati",
+    "sitemap": "Mappa del Sito",
+    "accessibility": "Accessibilità",
+    "cookieSettings": "Impostazioni Cookie",
+    "tagline": "Il tuo partner di fiducia per prenotazioni di voli senza problemi e esperienze di viaggio indimenticabili in tutto il mondo."
+  },
+  "languages": {
+    "en": "Inglese",
+    "it": "Italiano",
+    "si": "Singalese"
+  },
+  "auth": {
+    "signin": {
+      "title": "Bentornato",
+      "description": "Accedi al tuo account per continuare",
+      "form": {
+        "email": {
+          "label": "Email",
+          "placeholder": "Inserisci la tua email"
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "Inserisci la tua password",
+          "forgot": "Password dimenticata?"
+        }
+      },
+      "button": {
+        "submit": "Accedi",
+        "loading": "Accesso in corso..."
+      },
+      "link": {
+        "signup": {
+          "prompt": "Non hai un account?",
+          "text": "Registrati"
+        }
+      },
+      "loading": "Caricamento...",
+      "error": {
+        "noAccount": {
+          "title": "Nessun account trovato con questo indirizzo email.",
+          "description": "Si prega di creare un nuovo account o controllare l'ortografia dell'email."
+        },
+        "incorrectPassword": {
+          "title": "La password inserita non è corretta.",
+          "description": "Riprova o reimposta la password."
+        },
+        "unverifiedEmail": {
+          "title": "Il tuo indirizzo email non è stato verificato.",
+          "description": "Controlla la tua casella di posta e clicca sul link di verifica."
+        },
+        "pendingApproval": {
+          "title": "Il tuo account è in attesa di approvazione.",
+          "description": "Attendi l'approvazione dell'amministratore prima di accedere."
+        },
+        "missingFields": {
+          "title": "Inserisci sia email che password.",
+          "description": "Compila tutti i campi obbligatori."
+        },
+        "generic": {
+          "title": "Accesso fallito.",
+          "description": "Controlla le tue credenziali e riprova."
+        }
+      },
+      "success": {
+        "title": "Successo",
+        "description": "Accesso effettuato con successo!"
+      }
+    },
+    "signup": {
+      "title": "Crea Account",
+      "description": "Unisciti a noi per prenotare il tuo prossimo volo",
+      "form": {
+        "name": {
+          "label": "Nome Completo",
+          "placeholder": "Inserisci il tuo nome completo"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "Inserisci la tua email"
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "Inserisci la tua password"
+        },
+        "passwordStrength": {
+          "label": "Forza Password:",
+          "weak": "Debole",
+          "fair": "Sufficiente",
+          "good": "Buona",
+          "strong": "Forte"
+        },
+        "passwordValidation": {
+          "heading": "Requisiti di Validazione",
+          "success": "La password soddisfa i requisiti di sicurezza"
+        },
+        "passwordSuggestion": {
+          "heading": "Password Forte Suggerita:",
+          "button": "Usa Questa"
+        },
+        "confirmPassword": {
+          "label": "Conferma Password",
+          "placeholder": "Conferma la tua password",
+          "match": "Le password corrispondono",
+          "mismatch": "Le password non corrispondono"
+        },
+        "role": {
+          "label": "Tipo di Account",
+          "client": {
+            "label": "Cliente",
+            "description": "Prenota voli per uso personale"
+          },
+          "agent": {
+            "label": "Agente",
+            "description": "Gestisci prenotazioni per i clienti (richiede approvazione)"
+          }
+        }
+      },
+      "button": {
+        "submit": "Crea Account",
+        "loading": "Creazione account in corso..."
+      },
+      "link": {
+        "signin": {
+          "prompt": "Hai già un account?",
+          "text": "Accedi"
+        }
+      },
+      "success": {
+        "title": "Registrazione Riuscita!",
+        "description": "Il tuo account è stato creato",
+        "email": {
+          "verify": "Verifica la tua email",
+          "sent": "Un link di verifica è stato inviato alla tua email",
+          "spam": "Non hai ricevuto l'email? Controlla la cartella spam"
+        },
+        "button": "Continua per Accedere",
+        "passwordApplied": {
+          "title": "Password Applicata",
+          "description": "Password forte impostata. Ricordati di salvarla!"
+        }
+      },
+      "error": {
+        "weakPassword": {
+          "title": "Password Debole",
+          "description": "Utilizza una password più forte. Controlla i suggerimenti qui sotto."
+        },
+        "passwordMismatch": {
+          "title": "Errore",
+          "description": "Le password non corrispondono"
+        },
+        "registrationFailed": {
+          "title": "Errore",
+          "description": "Registrazione fallita"
+        },
+        "generic": {
+          "title": "Errore",
+          "description": "Si è verificato un errore inaspettato"
+        }
+      }
+    }
+  },
+  "booking": {
+    "section": {
+      "flight": "Volo Selezionato",
+      "passenger": "Dettagli Passeggero"
+    },
+    "passenger": {
+      "count": "{current} di {total} passeggeri aggiunti",
+      "addMore": "Aggiungi Altri {count} Passeggero/i"
+    },
+    "progress": {
+      "label": "Progresso"
+    },
+    "button": {
+      "addPassenger": "Aggiungi Passeggero {number}",
+      "checkingAvailability": "Controllo Disponibilità...",
+      "processingPayment": "Elaborazione Pagamento...",
+      "available": "Disponibile",
+      "proceedPayment": "Procedi al Pagamento",
+      "goBackToFlights": "Torna alla Ricerca Voli",
+      "checkAvailabilityProceed": "Controlla Disponibilità e Procedi"
+    },
+    "badges": {
+      "child": "Bambino",
+      "infant": "Neonato"
+    },
+    "countdown": {
+      "label": "Tempo rimanente:"
+    },
+    "toast": {
+      "removed": {
+        "title": "Passeggero Rimosso",
+        "description": "Il passeggero è stato rimosso con successo."
+      },
+      "maxReached": {
+        "title": "Massimo Raggiunto",
+        "description": "Puoi aggiungere fino a {count} passeggeri."
+      },
+      "missingPassengers": {
+        "title": "Errore",
+        "description": "Aggiungi i dettagli per tutti i {count} passeggeri."
+      },
+      "noFlight": {
+        "title": "Errore",
+        "description": "Nessun volo selezionato"
+      },
+      "availabilityExpired": {
+        "title": "Disponibilità Scaduta",
+        "description": "Controlla nuovamente la disponibilità prima di procedere al pagamento."
+      },
+      "unavailable": {
+        "title": "Volo Non Disponibile",
+        "description": "Il volo selezionato non è più disponibile."
+      },
+      "failedBooking": {
+        "title": "Errore",
+        "description": "Impossibile creare la prenotazione Amadeus"
+      },
+      "failedAvailability": {
+        "title": "Errore",
+        "description": "Impossibile verificare la disponibilità del volo. Riprova."
+      }
+    },
+    "status": {
+      "rechecking": "Ricontrollo disponibilità volo..."
+    },
+    "passengerForm": {
+      "fields": {
+        "firstName": "Nome",
+        "lastName": "Cognome",
+        "email": "Email",
+        "phoneNumber": "Numero di Telefono",
+        "dateOfBirth": "Data di Nascita",
+        "gender": "Genere",
+        "passportNumber": "Numero di Passaporto"
+      },
+      "placeholders": {
+        "firstName": "Giovanni",
+        "lastName": "Rossi",
+        "email": "giovanni.rossi@example.com",
+        "phoneNumber": "+39123456789",
+        "gender": "Seleziona genere",
+        "passportNumber": "AB1234567"
+      },
+      "gender": {
+        "male": "Maschile",
+        "female": "Femminile"
+      },
+      "validation": {
+        "firstNameMin": "Il nome deve contenere almeno 2 caratteri",
+        "lastNameMin": "Il cognome deve contenere almeno 2 caratteri",
+        "emailInvalid": "Indirizzo email non valido",
+        "phoneMin": "Il numero di telefono deve contenere almeno 10 cifre",
+        "passportMin": "Il numero di passaporto deve contenere almeno 6 caratteri",
+        "infantAge": "Il passeggero deve avere meno di 2 anni per il biglietto neonato",
+        "childAge": "Il passeggero deve avere tra 2 e 12 anni per il biglietto bambino",
+        "adultAge": "Il passeggero deve avere almeno 12 anni per il biglietto adulto"
+      },
+      "travelerType": {
+        "infant": "Passeggero Neonato (Meno di 2 anni)",
+        "child": "Passeggero Bambino (2-12 anni)"
+      },
+      "toast": {
+        "error": "Errore",
+        "success": "Successo",
+        "ageValidationError": "Errore di Validazione dell'Età",
+        "noFlight": "Nessun volo selezionato. Seleziona prima un volo.",
+        "updated": "Dettagli passeggero aggiornati con successo!",
+        "added": "Passeggero aggiunto con successo!",
+        "failedSave": "Impossibile salvare i dettagli del passeggero"
+      },
+      "button": {
+        "update": "Aggiorna Passeggero",
+        "add": "Aggiungi Passeggero"
+      }
+    },
+    "flightCard": {
+      "returnFlight": "Volo di Ritorno",
+      "departureFlight": "Volo di Partenza",
+      "nonStop": "Diretto",
+      "stops": "{count} scalo{count, plural, one {} other {i}}",
+      "noFlight": "Nessun volo selezionato",
+      "selectFlight": "Seleziona un volo per visualizzare i dettagli",
+      "browseFlights": "Cerca Voli",
+      "roundTrip": "Volo Andata e Ritorno",
+      "oneWay": "Volo Solo Andata",
+      "itineraryDetails": "Dettagli itinerario volo",
+      "totalFare": "Tariffa totale per tutti i passeggeri",
+      "passengers": "{count} Passeggero{count, plural, one {} other {i}}",
+      "adults": "{count} Adulto{count, plural, one {} other {i}}",
+      "children": "{count} Bambino{count, plural, one {} other {i}}",
+      "infants": "{count} Neonato{count, plural, one {} other {i}}"
+    }
+  },
+  "about": {
+    "hero": {
+      "badge": "CHI SIAMO",
+      "title": "Il Tuo Viaggio è la Nostra Priorità",
+      "paragraph1": "Fondati con la visione di rivoluzionare le esperienze di viaggio, combiniamo tecnologia all'avanguardia con servizio personalizzato per creare viaggi indimenticabili per i nostri clienti in tutto il mondo.",
+      "paragraph2": "Con oltre 15 anni di eccellenza nel settore dei viaggi, il nostro team di professionisti dedicati porta un'esperienza senza pari nella creazione di soluzioni di viaggio su misura che superano le aspettative.",
+      "paragraph3": "Crediamo che il viaggio sia più di una semplice destinazione: si tratta di creare ricordi, favorire connessioni e vivere il mondo in modi che ci trasformano.",
+      "award": {
+        "title": "Pluripremiata",
+        "subtitle": "Agenzia di Viaggi 2024"
+      },
+      "stats": {
+        "years": "Anni",
+        "travelers": "Viaggiatori",
+        "destinations": "Destinazioni"
+      }
+    },
+    "principles": {
+      "badge": "I NOSTRI PRINCIPI",
+      "title": "I Nostri Principi Guida",
+      "description": "I valori fondamentali che guidano tutto ciò che facciamo",
+      "vision": {
+        "title": "La Nostra Visione",
+        "content": "Diventare il partner di viaggio più affidabile al mondo, collegando le persone a esperienze straordinarie e promuovendo una comunità globale di viaggiatori appassionati che apprezzano l'autenticità e l'avventura."
+      },
+      "mission": {
+        "title": "La Nostra Missione",
+        "content": "Offrire esperienze di viaggio eccezionali e personalizzate attraverso soluzioni innovative, consulenza esperta e impegno incrollabile per la soddisfazione del cliente in ogni fase del viaggio."
+      }
+    },
+    "team": {
+      "badge": "LEADERSHIP",
+      "title": "Il Nostro Team Dedicato",
+      "description": "Guidati da professionisti esperti impegnati nell'eccellenza in ogni aspetto dei servizi di viaggio",
+      "leader": {
+        "name": "Sig. Jhon Doe",
+        "title": "Fondatore e CEO",
+        "credentials": "IATA (sub Capitano CAAC)",
+        "description1": "Con oltre 15 anni di esperienza distinta nel settore dei viaggi e dell'aviazione, il Sig. Jhon Doe ha costruito una reputazione eccezionale nel fornire soluzioni di viaggio di classe mondiale e nel promuovere relazioni durature con clienti in tutto il mondo.",
+        "description2": "La sua esperienza abbraccia pianificazione strategica, gestione operativa e relazioni con i clienti, rendendolo un leader rispettato nel settore. Sotto la sua guida visionaria, l'azienda ha raggiunto una crescita e un riconoscimento notevoli.",
+        "description3": "Impegnato nell'eccellenza e nell'innovazione, il Sig. Jhon Doe ha stabilito partnership strategiche con le principali compagnie aeree ed espanso i servizi a livello globale, garantendo che i clienti ricevano esperienze di viaggio senza pari su misura per le loro esigenze uniche.",
+        "badge1": "Certificato IATA",
+        "badge2": "15+ Anni di Esperienza"
+      }
+    },
+    "staff": {
+      "badge": "CHI SIAMO",
+      "title": "Il Nostro Staff Esperto",
+      "description": "Professionisti appassionati dedicati al tuo viaggio",
+      "members": {
+        "1": {
+          "title": "Agenti Professionalmente Formati",
+          "description": "Il nostro team riceve formazione continua e rimane aggiornato con le ultime tendenze del settore, garantendo una guida esperta per i tuoi viaggi."
+        },
+        "2": {
+          "title": "Specialisti in Biglietteria Certificati",
+          "description": "Appassionati di creare soluzioni di viaggio su misura, mettiamo il massimo impegno nel rendere realtà la tua vacanza da sogno."
+        },
+        "3": {
+          "title": "Consulenti di Viaggio Esperti",
+          "description": "Con anni di esperienza e una profonda conoscenza delle destinazioni globali, forniamo consigli esperti per i tuoi piani di viaggio da sogno."
+        },
+        "4": {
+          "title": "Team di Supporto Dedicato",
+          "description": "I nostri professionisti offrono un servizio eccezionale con un impegno verso l'eccellenza. Manteniamo sempre ciò che promettiamo."
+        }
+      }
+    },
+    "partners": {
+      "badge": "PARTNERSHIP AFFIDABILI",
+      "title": "I Nostri Partner di Viaggio Premium",
+      "description": "Collaboriamo con le principali compagnie aeree del mondo per offrirti esperienze di viaggio eccezionali e un valore imbattibile",
+      "trustBadge": "Partnership affidabili con",
+      "trustBadgeHighlight": "50+ compagnie aeree premium",
+      "trustBadgeSuffix": "in tutto il mondo"
+    },
+    "benefits": {
+      "badge": "PERCHÉ SCEGLIERCI",
+      "title": "I Vantaggi di Sceglierci",
+      "description": "Sperimenta la differenza con i nostri servizi di viaggio completi su misura per le tue esigenze",
+      "items": {
+        "1": {
+          "title": "Esperienza Locale, Portata Globale",
+          "description": "Come agenzia di viaggi boutique, offriamo un servizio personalizzato combinato con l'accesso a destinazioni in tutto il mondo e prezzi competitivi."
+        },
+        "2": {
+          "title": "Assistenza Personalizzata",
+          "description": "Il nostro team dedicato fornisce supporto individuale per garantire che ogni dettaglio del tuo viaggio sia allineato con le tue preferenze e il tuo budget."
+        },
+        "3": {
+          "title": "Supporto 24/7",
+          "description": "Siamo disponibili 24 ore su 24, 7 giorni su 7 per assisterti durante tutto il tuo viaggio, garantendo tranquillità ovunque tu vada."
+        },
+        "4": {
+          "title": "Servizi di Viaggio Completi",
+          "description": "Da voli e hotel a tour e attività, gestiamo ogni aspetto per creare esperienze di viaggio senza soluzione di continuità."
+        },
+        "5": {
+          "title": "Offerte e Pacchetti Esclusivi",
+          "description": "Accedi a promozioni speciali e pacchetti esclusivi non disponibili altrove, massimizzando il valore per il tuo denaro."
+        },
+        "6": {
+          "title": "Partnership Affidabili",
+          "description": "Lavoriamo con compagnie aeree, hotel e tour operator affidabili per garantire la qualità durante tutta la tua esperienza."
+        }
+      }
+    },
+    "testimonials": {
+      "badge": "STORIE DAI NOSTRI CLIENTI",
+      "title": "Ascolta i Nostri Clienti Soddisfatti",
+      "description": "Esperienze reali di viaggiatori che ci hanno affidato i loro viaggi",
+      "reviews": {
+        "1": {
+          "name": "Sara M.",
+          "role": "Viaggiatore Verificato",
+          "comment": "Servizio eccezionale che ha reso la nostra luna di miele davvero indimenticabile. L'attenzione ai dettagli era eccezionale!"
+        },
+        "2": {
+          "name": "Giovanni Rossi",
+          "role": "Viaggiatore d'Affari",
+          "comment": "Team professionale che comprende davvero le esigenze dei viaggiatori d'affari. Altamente efficiente!"
+        },
+        "3": {
+          "name": "Marco Bianchi",
+          "role": "Cercatore di Avventure",
+          "comment": "La migliore agenzia di viaggi con cui abbia mai lavorato. Hanno trovato offerte straordinarie che non potevo trovare altrove!"
+        },
+        "4": {
+          "name": "Elena Ferrari",
+          "role": "Viaggiatore Familiare",
+          "comment": "Esperienza straordinaria dall'inizio alla fine. Perfetto per le famiglie! Lo userò sicuramente di nuovo."
+        }
+      },
+      "stats": {
+        "rating": "Valutazione Media",
+        "clients": "Clienti Soddisfatti",
+        "satisfaction": "Tasso di Soddisfazione",
+        "support": "Supporto Disponibile"
+      }
+    },
+    "contact": {
+      "badge": "CONTATTACI",
+      "title": "Ci Piacerebbe Sentirti",
+      "description": "Hai una domanda o sei pronto per iniziare a pianificare la tua prossima avventura? Il nostro team è qui per aiutarti a realizzare i tuoi sogni di viaggio.",
+      "email": "Inviaci un'Email",
+      "phone": "Chiamaci",
+      "visit": "Visitaci"
+    }
+  },
+  "services": {
+    "hero": {
+      "badge": "I NOSTRI SERVIZI",
+      "title": "Il Tuo Viaggio è la Nostra Priorità",
+      "paragraph1": "Benvenuti nei nostri servizi di viaggio completi progettati per rendere il vostro viaggio senza soluzione di continuità e indimenticabile. Dalle prenotazioni di voli all'assistenza per i visti, siamo la vostra soluzione unica per tutte le esigenze di viaggio.",
+      "paragraph2": "Con partnership in tutto il mondo e decenni di esperienza nel settore, offriamo un servizio personalizzato che trasforma il modo in cui si vive il viaggio. Ogni dettaglio conta e garantiamo l'eccellenza in ogni fase.",
+      "paragraph3": "Che tu stia pianificando una vacanza in famiglia, un viaggio d'affari o un matrimonio da sogno, il nostro team dedicato lavora instancabilmente per superare le tue aspettative e creare ricordi che durano per tutta la vita.",
+      "cta": "Inizia Oggi"
+    },
+    "grid": {
+      "badge": "I NOSTRI SERVIZI",
+      "title": "Soluzioni di Viaggio Complete",
+      "description": "Da voli e visti a crociere e viaggi di gruppo, gestiamo ogni aspetto del tuo viaggio"
+    },
+    "card": {
+      "popular": "Popolare",
+      "keyBenefits": "Vantaggi Principali",
+      "additionalServices": "Servizi Aggiuntivi"
+    },
+    "items": {
+      "1": {
+        "title": "Prenotazioni Voli",
+        "description": "Accedi a tariffe competitive e opzioni di prenotazione flessibili per voli nazionali e internazionali.",
+        "mainBenefits": {
+          "1": "Garanzia del miglior prezzo su tutti i voli",
+          "2": "Politiche di prenotazione e cancellazione flessibili",
+          "3": "Opzioni multi-città e andata e ritorno"
+        },
+        "extraPerks": {
+          "1": "Aggiornamenti sullo stato del volo in tempo reale",
+          "2": "Assistenza per la selezione dei posti",
+          "3": "Gestione richieste pasti speciali",
+          "4": "Opzioni assicurazione di viaggio"
+        }
+      },
+      "2": {
+        "title": "Servizi Visti",
+        "description": "Assistenza esperta con richieste di visto e documentazione per viaggi internazionali senza problemi.",
+        "mainBenefits": {
+          "1": "Supporto completo per la richiesta di visto",
+          "2": "Verifica e preparazione dei documenti",
+          "3": "Elaborazione accelerata disponibile"
+        },
+        "extraPerks": {
+          "1": "Assistenza visto turistico",
+          "2": "Supporto visto d'affari",
+          "3": "Guida visto studenti",
+          "4": "Aiuto visto di transito",
+          "5": "Servizi di estensione visto"
+        }
+      },
+      "3": {
+        "title": "Prenotazioni Hotel",
+        "description": "Prenota tra migliaia di hotel in tutto il mondo, dalle sistemazioni economiche a quelle di lusso.",
+        "mainBenefits": {
+          "1": "Accesso a offerte esclusive per hotel",
+          "2": "Ampia gamma di opzioni di alloggio",
+          "3": "Recensioni e valutazioni degli ospiti verificate"
+        },
+        "extraPerks": {
+          "1": "Cancellazione gratuita su hotel selezionati",
+          "2": "Vantaggi del programma fedeltà",
+          "3": "Possibilità di upgrade della camera",
+          "4": "Coordinamento richieste speciali"
+        }
+      },
+      "4": {
+        "title": "Pacchetti Vacanza",
+        "description": "Pacchetti di viaggio accuratamente curati che combinano voli, hotel ed esperienze per la fuga perfetta.",
+        "mainBenefits": {
+          "1": "Pacchetti all-inclusive per viaggi senza preoccupazioni",
+          "2": "Itinerari personalizzabili per adattarsi al tuo stile",
+          "3": "Opzioni per famiglie e romantiche",
+          "4": "Sconti per viaggi di gruppo disponibili",
+          "5": "Esperienze locali e tour guidati inclusi",
+          "6": "Migliori combinazioni qualità-prezzo"
+        }
+      },
+      "5": {
+        "title": "Assicurazione di Viaggio",
+        "description": "Proteggi il tuo investimento con un'assicurazione di viaggio completa che copre emergenze mediche, cancellazioni e altro.",
+        "mainBenefits": {
+          "1": "Copertura per cancellazione e interruzione del viaggio",
+          "2": "Assistenza per emergenze mediche in tutto il mondo",
+          "3": "Protezione bagaglio smarrito"
+        },
+        "extraPerks": {
+          "1": "Copertura evacuazione di emergenza",
+          "2": "Linea di assistenza viaggi 24/7",
+          "3": "Compensazione per ritardo del volo",
+          "4": "Protezione responsabilità personale",
+          "5": "Opzioni di copertura sport avventura",
+          "6": "Copertura relativa al COVID-19",
+          "7": "Deroghe per condizioni preesistenti",
+          "8": "Aggiornamenti annullamento per qualsiasi motivo"
+        }
+      },
+      "6": {
+        "title": "Prenotazioni Crociere",
+        "description": "Esplora il mondo via mare con le nostre ampie opzioni di crociera con servizi di lusso e destinazioni esotiche.",
+        "mainBenefits": {
+          "1": "Accesso alle principali compagnie di crociera in tutto il mondo",
+          "2": "Assistenza per la selezione e l'upgrade della cabina",
+          "3": "Pianificazione delle escursioni a terra"
+        },
+        "extraPerks": {
+          "1": "Pacchetti crociera nel Mediterraneo",
+          "2": "Crociere nei Caraibi",
+          "3": "Rotte Alaska e Nord",
+          "4": "Crociere asiatiche e del Pacifico"
+        }
+      },
+      "7": {
+        "title": "Specialisti di Destinazione",
+        "description": "Il nostro team include esperti di destinazioni che forniscono conoscenze privilegiate e raccomandazioni personalizzate per la tua destinazione scelta.",
+        "mainBenefits": {
+          "1": "Conoscenze e approfondimenti esperti sulla destinazione",
+          "2": "Servizi di pianificazione itinerari personalizzati",
+          "3": "Gemme nascoste locali e raccomandazioni"
+        },
+        "extraPerks": {
+          "1": "Prenotazioni ristoranti e cene",
+          "2": "Prenotazione biglietti per eventi e attrazioni",
+          "3": "Organizzazione trasporti locali",
+          "4": "Coordinamento esperienze culturali"
+        }
+      },
+      "8": {
+        "title": "Viaggi di Gruppo",
+        "description": "Servizi specializzati per prenotazioni di gruppo tra cui eventi aziendali, riunioni di famiglia e celebrazioni speciali.",
+        "mainBenefits": {
+          "1": "Coordinatore viaggi di gruppo dedicato",
+          "2": "Tariffe e sconti speciali per gruppi",
+          "3": "Pacchetti di gruppo personalizzati"
+        },
+        "extraPerks": {
+          "1": "Pianificazione ritiri aziendali",
+          "2": "Organizzazione matrimoni di destinazione",
+          "3": "Coordinamento riunioni di famiglia",
+          "4": "Gestione viaggi squadre sportive"
+        }
+      }
+    },
+    "destinations": {
+      "badge": "DESTINAZIONI POPOLARI",
+      "title": "Esplora Destinazioni Straordinarie",
+      "description": "Scopri le località più affascinanti del mondo con la nostra guida esperta e pacchetti su misura",
+      "exploreNow": "Esplora Ora",
+      "viewAll": "Visualizza Tutte le Destinazioni",
+      "locations": {
+        "1": {
+          "name": "Berlino",
+          "category": "Culturale",
+          "description": "Monumenti storici e cultura vibrante"
+        },
+        "2": {
+          "name": "Kazakistan",
+          "category": "Asia",
+          "description": "Città moderne e paesaggi mozzafiato"
+        },
+        "3": {
+          "name": "Arabia Saudita",
+          "category": "Medio Oriente",
+          "description": "Patrimonio antico e meraviglie moderne"
+        },
+        "4": {
+          "name": "Hong Kong",
+          "category": "Asia",
+          "description": "Viste sullo skyline e delizie culinarie"
+        },
+        "5": {
+          "name": "Brasile",
+          "category": "America",
+          "description": "Spiagge, foreste pluviali e carnevale"
+        },
+        "6": {
+          "name": "Dubai",
+          "category": "Medio Oriente",
+          "description": "Shopping di lusso e architettura ultramoderna"
+        }
+      }
+    }
+  },
+  "home": {
+    "offers": {
+      "badge": "OFFERTE SPECIALI",
+      "title": "Incredibili Offerte Voli",
+      "description": "Non perdere queste incredibili offerte e sconti sui voli",
+      "expires": "Scade",
+      "loadMore": "Carica più offerte",
+      "bookNow": "Prenota Ora"
+    },
+    "travelTips": {
+      "badge": "CONSIGLI DI VIAGGIO",
+      "title": "Consigli di Viaggio Esperti",
+      "description": "Ottieni il massimo dal tuo viaggio con i nostri consigli di viaggio esperti",
+      "tips": {
+        "packLight": {
+          "title": "Viaggia Leggero",
+          "description": "Evita di fare bagagli eccessivi attenendoti all'essenziale. Questo renderà la tua esperienza di viaggio più confortevole e conveniente."
+        },
+        "exploreLocally": {
+          "title": "Esplora Localmente",
+          "description": "Immergiti nella cultura locale visitando destinazioni fuori dai percorsi turistici e interagendo con la gente del posto."
+        },
+        "beFlexible": {
+          "title": "Sii Flessibile",
+          "description": "Lascia spazio alla spontaneità e sii aperto a cambiare i tuoi piani. Questo ti permetterà di scoprire avventure inaspettate."
+        }
+      }
+    },
+    "testimonials": {
+      "badge": "TESTIMONIANZE",
+      "title": "Cosa Dicono i Nostri Utenti",
+      "description": "Scopri come la nostra piattaforma ha migliorato l'esperienza di pianificazione dei viaggi",
+      "reviews": {
+        "0": {
+          "name": "Giovanni Rossi",
+          "location": "Roma, Italia",
+          "time": "1 settimana fa",
+          "comment": "Prenotare i miei voli è stato semplice. L'interfaccia intuitiva ha reso il processo diretto e piacevole!"
+        },
+        "1": {
+          "name": "Maria Bianchi",
+          "location": "Milano, Italia",
+          "time": "2 settimane fa",
+          "comment": "Il sito offre una vasta gamma di opzioni. È stato facile da navigare e l'assistenza clienti è stata rapida."
+        },
+        "2": {
+          "name": "Marco Ferrari",
+          "location": "Firenze, Italia",
+          "time": "3 settimane fa",
+          "comment": "Un servizio facile da usare e affidabile con eccellenti opzioni di ricerca e prenotazione. Altamente raccomandato!"
+        }
+      }
+    }
+  },
+  "flights": {
+    "modifySearch": "Modifica Ricerca",
+    "loader": {
+      "error": {
+        "unexpected": "Si è verificato un errore imprevisto durante il recupero dei voli",
+        "noParams": "Nessun parametro di ricerca fornito",
+        "noData": "Nessun dato sui voli disponibile"
+      }
+    },
+    "sidebar": {
+      "title": "Filtri Voli",
+      "resultsCount": "{count} voli trovati",
+      "clearAll": "Cancella Tutto",
+      "priceRange": "Fascia di Prezzo",
+      "budgetUpTo": "Budget fino a ${price}",
+      "flightStops": "Scali Volo",
+      "stops": {
+        "any": "Qualsiasi numero di scali",
+        "direct": "Solo voli diretti",
+        "oneMax": "Massimo 1 scalo",
+        "twoPlus": "2+ scali consentiti"
+      },
+      "preferredAirline": "Compagnia Aerea Preferita",
+      "chooseAirline": "Scegli la tua compagnia aerea preferita",
+      "anyAirline": "Qualsiasi compagnia aerea",
+      "filteringBy": "Filtrando per",
+      "updatingFilters": "Aggiornamento filtri..."
+    },
+    "list": {
+      "heading": "Risultati Ricerca Voli",
+      "toggleFilters": "Attiva/Disattiva Filtri",
+      "noResults": "Nessun Risultato Trovato Per I Criteri Di Ricerca Forniti!"
+    },
+    "card": {
+      "departure": "Partenza",
+      "return": "Ritorno",
+      "direct": "Diretto",
+      "stops": "{count} Scali",
+      "baggageIncluded": "Bagaglio da stiva incluso!",
+      "noBaggage": "Nessun bagaglio incluso!"
+    }
+  },
+  "ticketDetails": {
+    "noFlightSelected": "Nessun volo selezionato",
+    "returnToSearch": "Torna alla ricerca voli",
+    "priceBreakdown": "Riepilogo Prezzi",
+    "perPassengerPricing": "Dettagli tariffari per passeggero",
+    "adult": "Adulto",
+    "child": "Bambino",
+    "infant": "Neonato",
+    "perPerson": "Per persona",
+    "totalAmount": "Importo Totale",
+    "allPassengersIncluded": "Tutti i passeggeri inclusi",
+    "continueToBooking": "Continua alla Prenotazione",
+    "itinerary": {
+      "departure": "Partenza",
+      "return": "Ritorno",
+      "directFlight": "Volo diretto",
+      "stops": "{count} scalo{count, plural, one {} other {i}}",
+      "baggageIncluded": "Bagaglio da stiva incluso!",
+      "noBaggage": "Nessun bagaglio incluso!"
+    },
+    "footer": {
+      "travelRules": "Potrebbero applicarsi regole di viaggio",
+      "connectionProtected": "Connessione protetta",
+      "hideDetails": "Nascondi dettagli",
+      "hide": "Nascondi",
+      "showDetails": "Mostra dettagli",
+      "details": "Dettagli"
+    },
+    "stopover": {
+      "duration": "Durata dello scalo",
+      "changingAirlines": "Cambio di compagnia aerea",
+      "stopoverAt": "Scalo a",
+      "airport": "Aeroporto"
+    },
+    "leg": {
+      "noBaggageInfo": "Nessuna informazione sul bagaglio"
+    },
+    "fareRules": {
+      "title": "Regole Tariffarie",
+      "loading": "Caricamento regole tariffarie...",
+      "unableToLoad": "Impossibile caricare le regole tariffarie",
+      "segment": "Segmento",
+      "noRulesAvailable": "Nessuna regola tariffaria disponibile",
+      "noRulesFound": "Dati delle regole tariffarie non trovati per questo volo."
+    }
+  },
+  "searchFlight": {
+    "returnFlight": "Volo di ritorno",
+    "travelClass": "Classe di viaggio",
+    "any": "QUALSIASI",
+    "economy": "Economy",
+    "premiumEconomy": "Premium Economy",
+    "business": "Business",
+    "first": "Prima classe",
+    "passengers": "Passeggeri",
+    "pax": "Pax",
+    "selectPassengers": "Seleziona numero di passeggeri",
+    "adults": "Adulti",
+    "adultsAge": "12+ anni",
+    "children": "Bambini",
+    "childrenAge": "2-11 anni",
+    "infants": "Neonati",
+    "infantsAge": "Meno di 2 anni",
+    "searchFlights": "Cerca Voli"
+  },
+  "airportSearch": {
+    "departure": "Partenza",
+    "arrival": "Arrivo",
+    "noResults": "Nessun risultato trovato",
+    "searchFailed": "Impossibile cercare aeroporti"
+  },
+  "datePicker": {
+    "pickDate": "Scegli una data",
+    "months": {
+      "january": "Gennaio",
+      "february": "Febbraio",
+      "march": "Marzo",
+      "april": "Aprile",
+      "may": "Maggio",
+      "june": "Giugno",
+      "july": "Luglio",
+      "august": "Agosto",
+      "september": "Settembre",
+      "october": "Ottobre",
+      "november": "Novembre",
+      "december": "Dicembre"
+    },
+    "days": {
+      "sun": "Dom",
+      "mon": "Lun",
+      "tue": "Mar",
+      "wed": "Mer",
+      "thu": "Gio",
+      "fri": "Ven",
+      "sat": "Sab"
+    }
+  }
+}
