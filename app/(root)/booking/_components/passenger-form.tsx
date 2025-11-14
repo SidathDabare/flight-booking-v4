@@ -2,6 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -29,6 +30,17 @@ import { useTranslations } from "next-intl";
 const calculateAge = (birthDate: string) => {
   const today = new Date();
   const birth = new Date(birthDate);
+
+  // Check if date is valid (not NaN)
+  if (isNaN(birth.getTime())) {
+    return -1; // Invalid date
+  }
+
+  // Check for future dates
+  if (birth > today) {
+    return -1; // Future date (invalid)
+  }
+
   let age = today.getFullYear() - birth.getFullYear();
   const monthDiff = today.getMonth() - birth.getMonth();
 
@@ -50,6 +62,19 @@ const validateAgeForTravelerType = (
   }
 
   const age = calculateAge(dateOfBirth);
+
+  // Check for invalid dates (negative age indicates error)
+  if (age < 0) {
+    return t("passengerForm.validation.invalidDate");
+  }
+
+  // Check for unrealistic ages (max 120 years)
+  const MAX_REASONABLE_AGE = 120;
+  if (age > MAX_REASONABLE_AGE) {
+    return t("passengerForm.validation.unrealisticAge");
+  }
+
+  // Validate age for traveler type
   switch (travelerType) {
     case "HELD_INFANT":
       return age < 2
@@ -142,6 +167,14 @@ export default function PassengerForm({
       }
     }
   };
+
+  // Re-validate date of birth when traveler type changes
+  useEffect(() => {
+    const currentDate = form.getValues("dateOfBirth");
+    if (currentDate && currentDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      validateDateOfBirth(currentDate);
+    }
+  }, [travelerType]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function onSubmit(values: PassengerFormValues) {
     if (!selectedFlight) {

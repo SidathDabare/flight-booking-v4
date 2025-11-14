@@ -45,7 +45,12 @@
       "Bash(tree:*)",
       "Bash(cat:*)",
       "Bash(awk:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(if exist \"C:\\Users\\sidat\\Desktop\\Clude\\flight-booking-v3\\docs\" rmdir \"C:\\Users\\sidat\\Desktop\\Clude\\flight-booking-v3\\docs\" /s /q)",
+      "Bash(organize-docs.bat)",
+      "Bash(cmd //c organize-docs.bat)",
+      "Bash(if exist \".next\" rmdir /s /q \".next\")",
+      "Bash(npx next build)"
     ],
     "deny": []
   }

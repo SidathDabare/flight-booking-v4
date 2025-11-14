@@ -350,20 +350,207 @@ const Component = () => {
 
 ## State Management
 
-### Zustand Store Pattern
-```typescript
-import { create } from "zustand";
+### React Context Pattern (For Component Tree State)
+Use React Context for shared state across component trees that don't need persistence.
 
-interface StoreState {
+```typescript
+import { createContext, useContext, useState, ReactNode } from "react";
+
+interface ContextState {
   value: string;
   setValue: (value: string) => void;
 }
 
-export const useStore = create<StoreState>((set) => ({
-  value: "",
-  setValue: (value) => set({ value }),
-}));
+const MyContext = createContext<ContextState | undefined>(undefined);
+
+export const MyProvider = ({ children }: { children: ReactNode }) => {
+  const [value, setValue] = useState<string>("");
+
+  return (
+    <MyContext.Provider value={{ value, setValue }}>
+      {children}
+    </MyContext.Provider>
+  );
+};
+
+export const useMyContext = () => {
+  const context = useContext(MyContext);
+  if (!context) {
+    throw new Error("useMyContext must be used within MyProvider");
+  }
+  return context;
+};
 ```
+
+**Real examples in codebase:**
+- Socket.IO context: `lib/socket-context.tsx`
+- Unread messages context: `lib/unread-messages-context.tsx`
+
+---
+
+### Zustand with Persistence (For Global State with TTL)
+Use Zustand with persist middleware for global state that needs to survive page refreshes with expiration.
+
+```typescript
+import { create } from "zustand";
+import { persist, devtools } from "zustand/middleware";
+
+interface MyStore {
+  data: DataType | null;
+  timestamp: number | null;
+  setData: (data: DataType | null) => void;
+  clearExpired: () => boolean;
+  getTimeRemaining: () => number | null;
+}
+
+const EXPIRATION_MS = 20 * 60 * 1000; // 20 minutes
+
+const useMyStore = create<MyStore>()(
+  persist(
+    devtools(
+      (set, get) => ({
+        data: null,
+        timestamp: null,
+
+        setData: (data) => {
+          set({
+            data,
+            timestamp: data ? Date.now() : null,
+          });
+        },
+
+        clearExpired: () => {
+          const { timestamp, data } = get();
+          if (!timestamp || !data) return false;
+
+          const elapsed = Date.now() - timestamp;
+          if (elapsed > EXPIRATION_MS) {
+            set({ data: null, timestamp: null });
+            return true;
+          }
+          return false;
+        },
+
+        getTimeRemaining: () => {
+          const { timestamp } = get();
+          if (!timestamp) return null;
+          const remaining = EXPIRATION_MS - (Date.now() - timestamp);
+          return remaining > 0 ? remaining : 0;
+        },
+      }),
+      { name: "My Store" }
+    ),
+    {
+      name: "my-storage",
+      partialize: (state) => ({
+        data: state.data,
+        timestamp: state.timestamp,
+      }),
+      storage: {
+        getItem: (name) => {
+          const str = localStorage.getItem(name);
+          if (!str) return null;
+
+          try {
+            const { state } = JSON.parse(str);
+            const { timestamp, data } = state;
+
+            if (timestamp && data) {
+              const elapsed = Date.now() - timestamp;
+              if (elapsed > EXPIRATION_MS) {
+                localStorage.removeItem(name);
+                return null;
+              }
+            }
+            return str;
+          } catch {
+            return null;
+          }
+        },
+        setItem: (name, value) => localStorage.setItem(name, value),
+        removeItem: (name) => localStorage.removeItem(name),
+      },
+    }
+  )
+);
+
+// Auto-check expiration on load and periodically
+if (typeof window !== "undefined") {
+  setTimeout(() => useMyStore.getState().clearExpired(), 100);
+  setInterval(() => useMyStore.getState().clearExpired(), 60 * 1000);
+}
+
+export default useMyStore;
+```
+
+**When to use:**
+- Data needs to survive page refresh
+- Data has a Time-To-Live (TTL)
+- Global state shared across routes
+- User selections that should persist temporarily
+
+**Real examples in codebase:**
+- Flight selection store: `lib/store/use-flight-store.ts` (20-minute TTL)
+- Passenger details store: `lib/store/use-passenger-store.ts` (20-minute TTL, PII handling)
+
+---
+
+### Zustand with Persistence for PII Data (Special Considerations)
+
+⚠️ **When persisting Personally Identifiable Information (PII), apply additional security measures:**
+
+**PII includes:** Passport numbers, date of birth, email, phone numbers, full names
+
+**Required Security Measures:**
+1. **Short TTL:** Maximum 20 minutes (match business flow duration)
+2. **User Warning:** Display banner informing users data is temporarily stored
+3. **Manual Clear:** Provide "Clear Now" button for user control
+4. **Auto-Clear:** Remove data after transaction completes
+5. **Never Store Payment Data:** Credit cards, CVV, etc. (PCI DSS violation)
+
+**Example Warning Banner:**
+```typescript
+{passengers.length > 0 && persistedAt && (
+  <div className="border border-yellow-200 bg-yellow-50 p-4 rounded-lg">
+    <div className="flex items-start gap-3">
+      <AlertTriangle className="h-5 w-5 text-yellow-600" />
+      <div className="flex-1">
+        <p className="text-sm font-medium text-yellow-800">
+          Sensitive Information Stored
+        </p>
+        <p className="text-xs text-yellow-700">
+          Your passenger details are temporarily saved for convenience.
+          They will be automatically cleared in 20 minutes or after booking completion.
+        </p>
+      </div>
+      <Button onClick={clearPassengers}>Clear Now</Button>
+    </div>
+  </div>
+)}
+```
+
+**GDPR Compliance Checklist:**
+- ✅ User consent: Warning banner (informed consent)
+- ✅ Data minimization: Only store necessary fields
+- ✅ Storage limitation: Auto-delete after 20 minutes
+- ✅ Right to erasure: "Clear Now" button
+
+**Real example in codebase:**
+- Passenger store: `lib/store/use-passenger-store.ts`
+- Warning banner: `app/(root)/booking/page.tsx` (security banner section)
+
+---
+
+### Choosing Between Context and Zustand
+
+| Use Case | Pattern | Why |
+|----------|---------|-----|
+| Component tree state | React Context | Simple, no persistence needed |
+| Socket connections | React Context | Lifecycle tied to component tree |
+| Form state | React Hook Form | Built-in validation |
+| Global state without persistence | Zustand (no persist) | Simple global state |
+| **Global state with persistence** | **Zustand + persist** | **Survives refresh, TTL support** |
+| **Temporary user selections** | **Zustand + persist** | **Better UX, recoverable state** |
 
 ## Performance Optimization
 
@@ -381,12 +568,39 @@ export const useStore = create<StoreState>((set) => ({
 - Maintain proper color contrast ratios
 - Add alt text to all images
 
-## Testing & Validation
+## Input Validation
 
-- Use Zod for all form validations
-- Validate API inputs server-side
-- Always sanitize user inputs
-- Use TypeScript strict mode
+**All user inputs MUST be validated:**
+
+- **Client-side:** Use Zod schemas with React Hook Form
+- **Server-side:** Always re-validate with Zod in API routes (never trust client)
+- **Sanitization:** Clean user inputs to prevent XSS/injection
+- **TypeScript:** Strict mode enabled for compile-time safety
+
+```typescript
+// Example: Zod schema for validation
+import { z } from "zod";
+
+const userSchema = z.object({
+  email: z.string().email("Invalid email"),
+  name: z.string().min(2).max(100),
+  age: z.number().int().positive().optional(),
+});
+
+// Server-side validation
+const result = userSchema.safeParse(data);
+if (!result.success) {
+  return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+}
+```
+
+## Testing (FUTURE ENHANCEMENT)
+**Status:** ⚠️ Not yet implemented
+
+Consider adding testing frameworks:
+- **Unit/Integration:** Jest + React Testing Library
+- **E2E Testing:** Playwright or Cypress
+- **API Testing:** Supertest or Vitest
 
 ## Styling Guidelines
 
@@ -531,11 +745,25 @@ if (file.size > maxSize) {
 // Never store files directly in public directory without validation
 ```
 
-### Rate Limiting
+### Rate Limiting (FUTURE ENHANCEMENT)
+**Status:** ⚠️ Not yet implemented
+
+For production deployments, consider implementing rate limiting for:
+- Login endpoints (`/api/auth/signin`)
+- Registration endpoints (`/api/auth/register`)
+- Password reset endpoints
+- High-frequency API routes
+
+**Recommended approaches:**
 ```typescript
-// Implement for sensitive endpoints
-// Consider using libraries like express-rate-limit or custom Redis-based solutions
-// Protect login, registration, password reset endpoints
+// Option 1: Upstash Rate Limit (Serverless-friendly)
+// npm install @upstash/ratelimit @upstash/redis
+
+// Option 2: Custom middleware with Redis
+// Implement request counting per IP/user
+
+// Option 3: Vercel Edge Config
+// Use Vercel's built-in rate limiting for edge functions
 ```
 
 ### Error Handling Security
@@ -576,20 +804,74 @@ components/
   admin/           # Admin-specific components
   agent/           # Agent-specific components
   custom ui/       # Custom reusable components
+  client/shared/   # Shared client UI patterns
 lib/               # Utility functions and configs
 hooks/             # Custom React hooks
 types/             # TypeScript type definitions
 public/            # Static assets
+.claude/
+  docs/            # All Claude Code-generated documentation
+    guides/        # Setup and how-to guides
+    architecture/  # System architecture and feature docs
+    history/       # Historical fixes and improvements
 ```
 
-## Performance Checklist
+### Documentation Organization (MANDATORY)
 
-- [ ] Images optimized with next/image
-- [ ] Components are server components by default
-- [ ] API routes have proper error handling
-- [ ] Database queries are optimized
-- [ ] Loading states implemented
-- [ ] Error states handled gracefully
+**ALL documentation MUST go in `.claude/docs/` folder:**
+
+1. **Creating New Documentation**
+   - Implementation guides → `.claude/docs/architecture/`
+   - Setup/how-to guides → `.claude/docs/guides/`
+   - Fix/improvement summaries → `.claude/docs/history/`
+
+2. **Root Directory Rules**
+   - ✅ Keep: `README.md` (project readme)
+   - ✅ Keep: `audit-report.md` (current audit state)
+   - ❌ NO other .md files in root
+   - Component READMEs stay with components (e.g., `app/(root)/about/README.md`)
+
+3. **Documentation Standards**
+   - Use clear markdown formatting
+   - Include table of contents for long docs
+   - Add date and status to implementation docs
+   - Link to related code files with relative paths
+   - Keep docs updated as features evolve
+
+## Performance Requirements
+
+### Image Optimization (MANDATORY)
+- **Always use `next/image`** for all images
+- Set proper `width` and `height` to prevent layout shift
+- Use `priority` prop for above-the-fold images
+- Use appropriate `quality` settings (default 75 is good)
+
+### Server Components (DEFAULT)
+- Use Server Components by default for better performance
+- Only add `"use client"` when necessary:
+  - Component uses React hooks (useState, useEffect, etc.)
+  - Component needs browser APIs (window, document)
+  - Component handles user interactions
+  - Component uses client-only libraries
+
+### API Routes (MANDATORY)
+- Implement comprehensive error handling with try-catch
+- Return appropriate HTTP status codes (200, 400, 401, 403, 404, 500)
+- Never expose internal error details to clients
+- Log errors server-side for debugging
+
+### Database Optimization
+- Use indexes for frequently queried fields
+- Implement pagination for large result sets
+- Use `.select()` to fetch only needed fields
+- Avoid N+1 queries (use `.populate()` wisely)
+- Use `.lean()` for read-only operations
+
+### UI State Management
+- Implement loading states with Skeleton components
+- Handle error states gracefully with error boundaries
+- Provide user feedback for all actions (toasts, notifications)
+- Show optimistic UI updates where appropriate
 
 ## Commit Message Style
 

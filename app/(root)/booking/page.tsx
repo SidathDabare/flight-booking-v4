@@ -2,7 +2,7 @@
 
 import SelectedFlightCard from "./_components/selected-flight-card";
 import PassengerForm from "./_components/passenger-form";
-import useFlightStore from "@/lib/store/use-flight-store";
+import useFlightStore, { FLIGHT_PERSISTENCE_MS } from "@/lib/store/use-flight-store";
 import usePassengerStore from "@/lib/store/use-passenger-store";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
@@ -16,6 +16,7 @@ import {
   CreditCard,
   X,
   ArrowLeft,
+  AlertTriangle,
 } from "lucide-react";
 import {
   Accordion,
@@ -54,7 +55,11 @@ export default function BookingPage() {
   const t = useTranslations("booking");
   const { data: session } = useSession();
   const selectedFlight = useFlightStore((state) => state.selectedFlight);
+  const getTimeRemaining = useFlightStore((state) => state.getTimeRemaining);
+  const clearExpiredFlight = useFlightStore((state) => state.clearExpiredFlight);
   const { passengers, clearPassengers, deletePassenger } = usePassengerStore();
+  const persistedAt = usePassengerStore((state) => state.persistedAt);
+  const clearExpiredPassengers = usePassengerStore((state) => state.clearExpiredPassengers);
   const router = useRouter();
   const { toast } = useToast();
   const [activePassenger, setActivePassenger] = useState<string | null>(null);
@@ -67,6 +72,7 @@ export default function BookingPage() {
     number | null
   >(null);
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
+  const [flightSelectionTimeRemaining, setFlightSelectionTimeRemaining] = useState<number | null>(null);
 
   // Constants
   const AVAILABILITY_TIMEOUT_MS = 10 * 60 * 1000; // 10 minutes in milliseconds
@@ -411,6 +417,11 @@ export default function BookingPage() {
 
         if (stripeResJson.url) {
           //console.log("Redirecting to Stripe checkout...");
+
+          // Clear passenger data before redirecting to payment
+          // Data is no longer needed and shouldn't persist after booking initiated
+          clearPassengers();
+
           window.location.href = stripeResJson.url;
         } else {
           //console.log("No checkout URL received from Stripe");
@@ -469,6 +480,51 @@ export default function BookingPage() {
     toast,
   ]);
 
+  // Check flight selection expiration (20 minutes)
+  useEffect(() => {
+    if (!selectedFlight) {
+      return;
+    }
+
+    // Update flight selection time remaining every second
+    const flightExpirationInterval = setInterval(() => {
+      const remaining = getTimeRemaining();
+
+      if (remaining === null || remaining <= 0) {
+        // Flight selection expired
+        clearExpiredFlight();
+        toast({
+          title: "Flight Selection Expired",
+          description: "Your flight selection has expired after 20 minutes. Please search for flights again.",
+          variant: "destructive",
+        });
+        router.push("/flights");
+      } else {
+        setFlightSelectionTimeRemaining(remaining);
+      }
+    }, 1000);
+
+    return () => clearInterval(flightExpirationInterval);
+  }, [selectedFlight, getTimeRemaining, clearExpiredFlight, router, toast]);
+
+  // Check passenger data expiration (20 minutes)
+  useEffect(() => {
+    if (passengers.length === 0) return;
+
+    const passengerExpirationInterval = setInterval(() => {
+      const expired = clearExpiredPassengers();
+      if (expired) {
+        toast({
+          title: "Passenger Data Expired",
+          description: "Your passenger details have expired after 20 minutes and have been cleared.",
+          variant: "destructive",
+        });
+      }
+    }, 1000);
+
+    return () => clearInterval(passengerExpirationInterval);
+  }, [passengers.length, clearExpiredPassengers, toast]);
+
   useEffect(() => {
     if (!selectedFlight) {
       //router.push("/flights");
@@ -499,11 +555,66 @@ export default function BookingPage() {
                   {t("section.flight")}
                 </h2>
                 <SelectedFlightCard />
+
+                {/* Flight Selection Expiration Timer */}
+                {flightSelectionTimeRemaining !== null && selectedFlight && (
+                  <div className="mt-3 px-3">
+                    <div
+                      className={cn(
+                        "flex items-center justify-between gap-2 px-3 py-2 rounded-lg text-xs transition-colors",
+                        flightSelectionTimeRemaining < 5 * 60 * 1000
+                          ? "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800"
+                          : flightSelectionTimeRemaining < 10 * 60 * 1000
+                            ? "bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-800"
+                            : "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800"
+                      )}
+                    >
+                      <span className="font-medium">Flight selection expires in:</span>
+                      <span className="font-mono font-bold">
+                        {formatTimeRemaining(flightSelectionTimeRemaining)}
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
             </section>
 
             {/* Passenger Details Section */}
             <section className="space-y-6">
+              {/* Security Warning Banner */}
+              {passengers.length > 0 && persistedAt && (
+                <div className="rounded-lg border border-yellow-200 dark:border-yellow-800/50 bg-yellow-50 dark:bg-yellow-900/20 p-3 md:p-4">
+                  <div className="flex items-start gap-3">
+                    <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 shrink-0 mt-0.5" />
+                    <div className="flex-1 space-y-1">
+                      <p className="text-sm font-medium text-yellow-800 dark:text-yellow-300">
+                        Sensitive Information Stored
+                      </p>
+                      <p className="text-xs text-yellow-700 dark:text-yellow-400">
+                        Your passenger details are temporarily saved for convenience. They will be automatically cleared in 20 minutes or after booking completion.
+                      </p>
+                      <p className="text-xs text-yellow-600 dark:text-yellow-500 mt-2">
+                        Data saved: {Math.floor((Date.now() - persistedAt) / 1000 / 60)} minute(s) ago
+                      </p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        clearPassengers();
+                        toast({
+                          title: "Passenger data cleared",
+                          description: "All passenger information has been removed.",
+                        });
+                      }}
+                      className="text-yellow-700 hover:text-yellow-900 dark:text-yellow-400 hover:bg-yellow-100 dark:hover:bg-yellow-900/30 shrink-0"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              )}
+
               <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl px-2 md:px-4 py-2 md:py-4 shadow-lg border border-white/20">
                 <div className="space-y-4 px-2">
                   <div className="flex items-center justify-between">
@@ -619,6 +730,7 @@ export default function BookingPage() {
                             <PassengerForm
                               passengerId={passenger.id}
                               onComplete={() => setActivePassenger(null)}
+                              travelerType={passenger.travelerType}
                             />
                           </div>
                         </AccordionContent>

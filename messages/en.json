@@ -329,7 +329,9 @@
         "passportMin": "Passport number must be at least 6 characters",
         "infantAge": "Passenger must be under 2 years old for infant ticket",
         "childAge": "Passenger must be between 2 and 12 years old for child ticket",
-        "adultAge": "Passenger must be 12 years or older for adult ticket"
+        "adultAge": "Passenger must be 12 years or older for adult ticket",
+        "invalidDate": "Invalid birth date. Please enter a valid date.",
+        "unrealisticAge": "Age seems unrealistic. Please check the birth date."
       },
       "travelerType": {
         "infant": "Infant Passenger (Under 2 years old)",

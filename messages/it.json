@@ -329,7 +329,9 @@
         "passportMin": "Il numero di passaporto deve contenere almeno 6 caratteri",
         "infantAge": "Il passeggero deve avere meno di 2 anni per il biglietto neonato",
         "childAge": "Il passeggero deve avere tra 2 e 12 anni per il biglietto bambino",
-        "adultAge": "Il passeggero deve avere almeno 12 anni per il biglietto adulto"
+        "adultAge": "Il passeggero deve avere almeno 12 anni per il biglietto adulto",
+        "invalidDate": "Data di nascita non valida. Inserisci una data valida.",
+        "unrealisticAge": "L'età sembra irrealistica. Controlla la data di nascita."
       },
       "travelerType": {
         "infant": "Passeggero Neonato (Meno di 2 anni)",
