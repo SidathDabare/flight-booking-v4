@@ -24,6 +24,20 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Fix chunk loading timeout issues
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.output = {
+        ...config.output,
+        chunkLoadTimeout: 60000, // Increase timeout to 60 seconds
+      };
+    }
+    return config;
+  },
+  // Optimize chunking strategy
+  experimental: {
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+  },
 };
 
 export default withNextIntl(nextConfig);

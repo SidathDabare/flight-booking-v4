@@ -1,342 +1,143 @@
-# Amadeus API Expert Skill - Complete Package
+# Amadeus API Expert Skill
 
-## 📦 What You've Received
+A comprehensive Claude Code skill that provides expert guidance on Amadeus Self-Service API integration for the Next.js flight booking application.
 
-I've created a comprehensive **Amadeus API Expert Skill** that transforms Claude into a specialized expert for Amadeus API integration. This skill is specifically designed for your B2C travel booking platform development.
+## What This Skill Provides
 
-## 📂 Deliverables
+### Core Knowledge Areas
+- **Authentication:** OAuth 2.0 client credentials flow with token caching
+- **Flight APIs:** Search, pricing, booking, seat maps, and order management
+- **Hotel APIs:** Search and booking workflows
+- **Reference Data:** Airport/city autocomplete, airline information
+- **Error Handling:** Comprehensive error codes and retry strategies
+- **TypeScript Integration:** Complete type definitions for API responses
 
-### 1. **amadeus-api-expert.skill** (Main Skill File)
-The complete, packaged skill ready to use. Upload this to Claude to activate the expert capabilities.
+### Key Features
+- Next.js 15 API route patterns with Amadeus integration
+- Zustand state management for search and booking flows
+- Zod validation schemas for API parameters
+- Token caching and automatic refresh logic
+- Exponential backoff retry strategies
+- User-friendly error message mapping
+- Test vs Production environment guidance
 
-**Contains:**
-- Complete API documentation (30+ endpoints)
-- Practical integration workflows
-- Error handling patterns
-- Authentication management
-- Codebase analysis tool
-- Real-world code examples
+## When This Skill Activates
 
-### 2. **AMADEUS_SKILL_USER_GUIDE.md** (Comprehensive Guide)
-90+ page user guide explaining:
-- How to install and use the skill
-- Detailed usage examples
-- When the skill triggers
-- Tips for best results
-- Common use cases
-- Troubleshooting guide
+The skill automatically triggers when you ask about:
+- Amadeus API endpoints (flight-offers-search, hotel-offers, etc.)
+- Flight search, pricing, or booking workflows
+- Authentication and token management
+- Amadeus error codes and debugging
+- TypeScript types for API responses
+- Integration with Next.js API routes
 
-### 3. **AMADEUS_QUICK_REFERENCE.md** (Cheat Sheet)
-Quick reference card with:
-- Common API calls (copy-paste ready)
-- Authentication examples
-- Error codes lookup table
-- SDK setup for Node.js and Python
-- Complete booking flow
-- Best practices checklist
+## Usage Examples
 
-## 🎯 What This Skill Does
-
-### Core Capabilities
-
-1. **Complete API Knowledge**
-   - All Amadeus Self-Service APIs documented
-   - Flight search, pricing, booking
-   - Hotels, transfers, activities
-   - Analytics and predictions
-   - Reference data (airports, airlines)
-
-2. **Practical Tools**
-   - **Codebase Analyzer**: Python script that scans your project and finds all Amadeus API usage
-   - **Request Builder**: Helps construct properly formatted API calls
-   - **Error Decoder**: Explains error codes with solutions
-   - **Token Manager**: Authentication patterns with auto-refresh
-
-3. **Integration Patterns**
-   - Complete booking flows
-   - Error handling with retry logic
-   - Data transformation utilities
-   - Performance optimization
-   - Production migration guide
-
-4. **Context-Aware Assistance**
-   - Understands your Next.js 14 + TypeScript stack
-   - Provides MongoDB-compatible examples
-   - Fits your 8-10 week MVP timeline
-   - B2C consumer-facing focus
-
-## 🔧 How It Works
-
-### Automated Triggering
-The skill automatically activates when you:
-- Ask about Amadeus APIs
-- Mention specific endpoints
-- Request authentication help
-- Need error debugging
-- Want codebase analysis
-- Ask about production deployment
-
-### Comprehensive Documentation
-The skill includes a complete API reference based on official Amadeus documentation:
-- **Authentication**: OAuth 2.0 flow, token management
-- **Flight APIs**: Search, pricing, booking, seat maps, status
-- **Hotel APIs**: Search, booking, ratings
-- **Reference Data**: Airports, airlines, locations
-- **Analytics**: Market insights, predictions
-- **Error Handling**: All error codes with solutions
-
-### Practical Codebase Analyzer
-Included Python script that:
-- Scans your entire codebase
-- Finds all Amadeus API calls
-- Identifies which endpoints you're using
-- Shows code samples from your project
-- Provides improvement recommendations
-- Generates detailed JSON and console reports
-
-## 💡 Usage Examples
-
-### Example 1: Learning an API
+### Get Help with an Endpoint
 ```
-You: "How do I search for refundable flights with Amadeus?"
-
-Claude (with skill):
-1. Reads the flight-offers-search endpoint documentation
-2. Explains the endpoint with parameters
-3. Shows complete request example with refundableFare=true
-4. Provides Next.js/TypeScript code
-5. Explains response structure
-6. Mentions error handling
+"How do I search for flights with Amadeus API?"
+"Show me the flight-offers-pricing endpoint"
+"What parameters does the hotel search API accept?"
 ```
 
-### Example 2: Debugging
+### Build Integration Code
 ```
-You: "I'm getting error 401 from Amadeus"
-
-Claude (with skill):
-1. Identifies error 38190: Invalid/expired token
-2. Explains why it happened
-3. Shows token refresh code
-4. Demonstrates automatic retry logic
-5. Provides complete error handler pattern
+"Create a Next.js API route for Amadeus flight search"
+"Implement token caching for Amadeus authentication"
+"Build a Zustand store for managing flight search results"
 ```
 
-### Example 3: Analyzing Your Code
+### Debug Issues
 ```
-You: "Analyze my project for Amadeus usage"
-
-Claude (with skill):
-1. Runs the codebase analyzer script
-2. Scans all your .js, .ts, .tsx files
-3. Finds every Amadeus API call
-4. Generates detailed report showing:
-   - Which files use Amadeus
-   - What endpoints you're calling
-   - Code samples with line numbers
-   - Recommendations for improvements
+"I'm getting error 38190 from Amadeus, how do I fix it?"
+"How do I handle rate limiting (429 errors)?"
+"Why is my flight booking request failing?"
 ```
 
-### Example 4: Building Integration
+### Understand Workflows
 ```
-You: "Create a Next.js API route for flight search with filters"
-
-Claude (with skill):
-1. Provides complete Next.js API route code
-2. Includes authentication token management
-3. Shows parameter validation
-4. Demonstrates error handling
-5. Formats response for frontend
-6. Explains TypeScript types
+"Explain the complete flight booking flow"
+"What's the difference between test and production environments?"
+"How do I confirm pricing before booking?"
 ```
 
-## 📊 Skill Contents
+## Integration with Project
 
-### Main Documentation (SKILL.md)
-- 6 comprehensive workflows
-- Common integration patterns
-- Error handling strategies
-- Production migration guide
-- SDK recommendations
-- Best practices
+This skill is specifically tailored for your flight booking application:
+- Uses Next.js 15 App Router patterns
+- Follows your TypeScript strict mode conventions
+- Integrates with NextAuth authentication
+- Uses Zod for validation (consistent with your forms)
+- Follows your MongoDB/Mongoose data model patterns
+- Respects your error handling conventions
 
-### API Reference (references/api_reference.md)
-Complete documentation of:
-- Flight APIs (15+ endpoints)
-- Hotel APIs (8+ endpoints)
-- Reference Data APIs (6+ endpoints)
-- Analytics & Predictions (5+ endpoints)
-- Authentication & Security
-- Error codes & handling
-- Rate limits & quotas
-- Test vs Production differences
+## Best Practices Included
 
-### Codebase Analyzer (scripts/analyze_codebase.py)
-Working Python script that:
-- Scans multiple file types (.js, .ts, .tsx, .jsx, .py, etc.)
-- Identifies Amadeus API patterns
-- Generates comprehensive reports
-- Provides actionable recommendations
-- Creates JSON output for processing
+1. **Always confirm pricing** before creating bookings
+2. **Cache tokens** with 5-minute buffer before expiry
+3. **Implement retry logic** for transient errors
+4. **Validate inputs** with Zod schemas
+5. **Use TypeScript** strictly for type safety
+6. **Never expose** raw API errors to users
+7. **Cache reference data** (airports, airlines) for 24 hours
+8. **Test thoroughly** in test environment first
 
-## 🚀 Getting Started
+## What Makes This Skill Different
 
-### Step 1: Install the Skill
-1. Open Claude
-2. Click the paperclip icon
-3. Upload `amadeus-api-expert.skill`
-4. The skill is now active
+### From Generic API Knowledge
+- Specifically designed for Next.js + TypeScript stack
+- Includes complete working code examples
+- Follows your project's patterns and conventions
+- Provides production-ready implementations
 
-### Step 2: Test It
-Try asking:
-- "What Amadeus endpoints are available for flight booking?"
-- "Show me how to authenticate with Amadeus"
-- "Create a TypeScript interface for flight search parameters"
+### From Amadeus Documentation
+- Interactive Q&A format tailored to your needs
+- Code examples specific to your tech stack
+- Explains both "why" and "how"
+- Includes common pitfalls and solutions
+- Project-specific integration patterns
 
-### Step 3: Use the Analyzer
-If you have existing Amadeus code:
-```bash
-python scripts/analyze_codebase.py /path/to/your/project
+## Optimization Benefits
+
+**Optimized from original version:**
+- Single-file skill (faster loading)
+- Progressive disclosure (loads only what's needed)
+- Project-specific examples (no generic boilerplate)
+- Integrated with Next.js patterns (matches your codebase)
+- Removed redundant documentation
+- Removed unnecessary Python analyzer (use Claude Code's built-in tools)
+- Streamlined for performance
+
+## Quick Reference
+
+### Common Endpoints
+- `GET /v2/shopping/flight-offers` - Search flights
+- `POST /v1/shopping/flight-offers/pricing` - Confirm price
+- `POST /v1/booking/flight-orders` - Create booking
+- `GET /v1/reference-data/locations` - Airport autocomplete
+- `GET /v3/shopping/hotel-offers` - Search hotels
+
+### Environment Variables
+```
+AMADEUS_API_KEY=your_key
+AMADEUS_API_SECRET=your_secret
+AMADEUS_BASE_URL=https://test.api.amadeus.com  # or api.amadeus.com for prod
 ```
 
-### Step 4: Build Your Integration
-Ask Claude specific questions as you develop:
-- "How do I handle price changes between search and booking?"
-- "Show me error handling for 429 rate limit"
-- "Create a booking flow for my Next.js app"
+### Common Error Codes
+- `38190` - Token expired (auto-handled by retry logic)
+- `4926` - Invalid parameters (validate with Zod)
+- `32171` - No results found (adjust search criteria)
+- `37200` - Flight no longer available (show alternatives)
+- `429` - Rate limited (exponential backoff)
 
-## ✨ Key Benefits
+## Official Resources
 
-✅ **Comprehensive**: 30+ Amadeus endpoints fully documented
-✅ **Practical**: Real code examples, not just theory
-✅ **Tested**: Based on official Amadeus documentation
-✅ **Specific**: Tailored for your Next.js/TypeScript stack
-✅ **Production-Ready**: Includes error handling, token management, best practices
-✅ **Actionable**: Codebase analyzer provides specific recommendations
-✅ **Time-Saving**: Expert knowledge instantly available
-✅ **Context-Aware**: Understands your B2C platform requirements
-
-## 🎓 What Makes This Different
-
-### From Generic API Knowledge:
-- Includes working codebase analyzer tool
-- Based on real Amadeus documentation, not assumptions
-- Covers production requirements (ticketing, consolidators)
-- Includes error codes and retry strategies
-
-### From Other Skills:
-- Domain-specific (travel APIs only)
-- Includes practical tools (analyzer script)
-- Context-aware for your project
-- Progressive disclosure (references loaded as needed)
-
-### From Documentation:
-- Interactive Q&A format
-- Code examples in your tech stack
-- Explains "why" not just "what"
-- Debugging assistance
-
-## 📈 What You Can Build With This
-
-With this skill, Claude can help you:
-
-1. **Flight Booking Engine**
-   - Search with filters
-   - Price confirmation
-   - Passenger management
-   - Seat selection
-   - Booking creation
-   - Order management
-
-2. **Hotel Integration**
-   - Search by location
-   - Filter by amenities
-   - Price comparison
-   - Booking flow
-
-3. **Multi-Service Platform**
-   - Flights + Hotels + Transfers
-   - Complete itinerary building
-   - Analytics integration
-   - Market insights
-
-4. **Advanced Features**
-   - Branded fares
-   - Ancillary services
-   - Travel predictions
-   - Price alerts
-   - Flexible dates
-
-## 🔄 Continuous Support
-
-The skill provides help throughout your development:
-
-**Planning Phase:**
-- "What APIs do I need for my MVP?"
-- "How does the booking flow work?"
-
-**Development Phase:**
-- "Create an API route for flight search"
-- "How do I handle this error?"
-
-**Testing Phase:**
-- "Analyze my codebase"
-- "What's missing in my error handling?"
-
-**Production Phase:**
-- "How do I migrate to production?"
-- "Set up monitoring for API errors"
-
-## 📝 Notes
-
-### Skill Design
-This skill follows the official skill-creator guidelines:
-- Progressive disclosure (references loaded as needed)
-- Concise main documentation
-- Practical tools included
-- Real-world examples
-- Clear triggering patterns
-
-### Maintenance
-The skill can be updated as:
-- New Amadeus APIs are released
-- You discover new patterns
-- Requirements change
-- Best practices evolve
-
-Simply edit the contents and re-package using the included packaging script.
-
-### Scope
-This skill focuses on Amadeus Self-Service APIs. It does NOT cover:
-- Enterprise APIs (different system)
-- Legacy SOAP APIs
-- Internal Amadeus systems
-- Non-Amadeus travel APIs
-
-## 🎉 Summary
-
-You now have a complete, production-ready Amadeus API Expert skill that:
-- Contains all Amadeus API knowledge
-- Includes practical codebase analyzer
-- Provides real code examples
-- Offers step-by-step guidance
-- Fits your specific tech stack
-- Saves hours of documentation reading
-- Helps debug issues quickly
-- Accelerates your MVP development
-
-**Three files delivered:**
-1. `amadeus-api-expert.skill` - Upload to Claude
-2. `AMADEUS_SKILL_USER_GUIDE.md` - How to use the skill
-3. `AMADEUS_QUICK_REFERENCE.md` - Quick lookup cheat sheet
-
-**Ready to transform your travel platform development!**
+- Amadeus Developer Portal: https://developers.amadeus.com
+- API Reference: https://developers.amadeus.com/self-service
+- GitHub: https://github.com/amadeus4dev
+- Support: Stack Overflow with `amadeus` tag
 
 ---
 
-## Quick Start
-
-1. Upload `amadeus-api-expert.skill` to Claude
-2. Ask: "Show me the flight-offers-search endpoint"
-3. Watch Claude provide comprehensive, accurate, actionable guidance
-
-Enjoy building your B2C travel platform with expert Amadeus integration support! 🚀✈️
+Ready to accelerate your Amadeus API integration with expert guidance!
