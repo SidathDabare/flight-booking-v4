@@ -1,8 +1,6 @@
-import ClientNavbar from "@/components/client ui/ClientNavbar";
-import Footer from "@/components/client ui/Footer";
-import { ClientChatPopup } from "@/components/client ui/ClientChatPopup";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
+import { ConditionalLayout } from '@/components/layouts/conditional-layout';
 
 export default async function RootLayout({
   children,
@@ -13,12 +11,9 @@ export default async function RootLayout({
 
   return (
     <NextIntlClientProvider messages={messages}>
-      <div className="flex min-h-screen w-full flex-col">
-        <ClientNavbar />
-        <main className="relative mt-[50px]">{children}</main>
-        <Footer />
-        <ClientChatPopup />
-      </div>
+      <ConditionalLayout>
+        {children}
+      </ConditionalLayout>
     </NextIntlClientProvider>
   );
 }

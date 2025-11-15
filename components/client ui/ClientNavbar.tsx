@@ -205,17 +205,19 @@ export const ClientNavbar = () => {
                           : t("dashboard.user")}
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem
-                    asChild
-                    className="px-4 py-2 hover:bg-gray-50 cursor-pointer"
-                  >
-                    <Link
-                      href={`/${session.user.role}/profile`}
-                      className="flex items-center w-full"
+                  {session.user.role !== "client" && (
+                    <DropdownMenuItem
+                      asChild
+                      className="px-4 py-2 hover:bg-gray-50 cursor-pointer"
                     >
-                      {t("profile")}
-                    </Link>
-                  </DropdownMenuItem>
+                      <Link
+                        href={`/${session.user.role}/profile`}
+                        className="flex items-center w-full"
+                      >
+                        {t("profile")}
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem
                     asChild
                     className="px-4 py-2 hover:bg-gray-50 cursor-pointer"

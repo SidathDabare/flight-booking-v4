@@ -4,8 +4,10 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import LoadingScreen from "@/components/ui/loading-screen";
+import { ClientSidebar } from "@/components/client/client-sidebar";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 
-export default function AgentLayout({
+export default function ClientLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -25,20 +27,24 @@ export default function AgentLayout({
       router.push("/unauthorized");
       return;
     }
-
-    if (!session.user.isApproved) {
-      router.push("/pending-approval");
-      return;
-    }
   }, [session, status, router]);
 
   if (status === "loading") {
     return <LoadingScreen />;
   }
 
-  if (!session || session.user.role !== "client" || !session.user.isApproved) {
+  if (!session || session.user.role !== "client") {
     return null;
   }
 
-  return <main>{children}</main>;
+  return (
+    <SidebarProvider>
+      <ClientSidebar />
+      <SidebarInset>
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          {children}
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
+  );
 }
