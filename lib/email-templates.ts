@@ -93,3 +93,51 @@ export function getAgentRejectionTemplate(agentName: string) {
     </div>
   `;
 }
+
+export function getPasswordResetTemplate(name: string, resetUrl: string) {
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <h2 style="color: #333; text-align: center;">Password Reset Request</h2>
+      <p>Hi ${name},</p>
+
+      <p>We received a request to reset your password for your Flight Booking account. If you made this request, click the button below to reset your password:</p>
+
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="${resetUrl}"
+           style="background-color: #007bff; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
+          Reset Password
+        </a>
+      </div>
+
+      <p style="color: #666; font-size: 14px;">Or copy and paste this link into your browser:</p>
+      <p style="word-break: break-all; color: #007bff; font-size: 14px;">${resetUrl}</p>
+
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 14px;">
+        <p><strong>Important:</strong> This password reset link will expire in 1 hour.</p>
+        <p><strong>Security Notice:</strong> If you didn't request a password reset, please ignore this email or contact support if you have concerns about your account security.</p>
+        <p>Best regards,<br>Flight Booking Team</p>
+      </div>
+    </div>
+  `;
+}
+
+export function getPasswordResetConfirmationTemplate(name: string) {
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <h2 style="color: #28a745; text-align: center;">Password Successfully Reset</h2>
+      <p>Hi ${name},</p>
+
+      <p>This email confirms that your password has been successfully changed.</p>
+
+      <div style="background-color: #d4edda; border-left: 4px solid #28a745; padding: 15px; margin: 20px 0;">
+        <p style="margin: 0; color: #155724;"><strong>Security Tip:</strong> Make sure to use a strong, unique password and never share it with anyone.</p>
+      </div>
+
+      <p>If you did not make this change, please contact our support team immediately as your account may have been compromised.</p>
+
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 14px;">
+        <p>Best regards,<br>Flight Booking Team</p>
+      </div>
+    </div>
+  `;
+}

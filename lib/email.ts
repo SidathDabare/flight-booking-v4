@@ -1,4 +1,8 @@
 import { Resend } from "resend";
+import {
+  getPasswordResetTemplate,
+  getPasswordResetConfirmationTemplate
+} from "./email-templates";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -116,9 +120,9 @@ export async function notifyAgentRejection(agentEmail: string, agentName: string
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <h2 style="color: #333; text-align: center;">Agent Application Update</h2>
           <p>Dear ${agentName},</p>
-          
+
           <p>Thank you for your interest in becoming an agent with Flight Booking. After careful review of your application, we regret to inform you that we cannot approve your agent account at this time.</p>
-          
+
           <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
             <h3 style="color: #333; margin-top: 0;">Possible reasons for this decision:</h3>
             <ul style="color: #555;">
@@ -128,16 +132,46 @@ export async function notifyAgentRejection(agentEmail: string, agentName: string
               <li>Verification issues</li>
             </ul>
           </div>
-          
+
           <p>You are welcome to apply again in the future. If you believe this decision was made in error or if you have additional information to provide, please contact our support team.</p>
-          
+
           <p>We appreciate your understanding and interest in our platform.</p>
-          
+
           <p>Best regards,<br>Flight Booking Team</p>
         </div>
       `,
     });
   } catch (error) {
     console.error("Error sending rejection notification:", error);
+  }
+}
+
+export async function sendPasswordResetEmail(email: string, name: string, token: string) {
+  try {
+    const resetUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/auth/reset-password?token=${token}`;
+
+    await resend.emails.send({
+      from: process.env.EMAIL_FROM || "onboarding@resend.dev",
+      to: email,
+      subject: "Password Reset Request - Flight Booking",
+      html: getPasswordResetTemplate(name, resetUrl),
+    });
+  } catch (error) {
+    console.error("Error sending password reset email:", error);
+    throw new Error("Failed to send password reset email");
+  }
+}
+
+export async function sendPasswordResetConfirmation(email: string, name: string) {
+  try {
+    await resend.emails.send({
+      from: process.env.EMAIL_FROM || "onboarding@resend.dev",
+      to: email,
+      subject: "Password Successfully Reset - Flight Booking",
+      html: getPasswordResetConfirmationTemplate(name),
+    });
+  } catch (error) {
+    console.error("Error sending password reset confirmation:", error);
+    // Don't throw error for confirmation email - it's not critical
   }
 }
