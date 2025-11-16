@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { Message } from "@/lib/db/models/Message";
+import { User } from "@/lib/db/models/User";
 import { connectToDatabase } from "@/lib/db/mongoose";
+import { sendMessageAssignedNotification } from "@/lib/email";
 
 // PATCH /api/messages/[id]/accept - Accept a message (admin/agent only)
 export async function PATCH(
@@ -63,6 +65,25 @@ export async function PATCH(
         agentName: session.user.name || "Unknown",
       });
     }
+
+    // Send email notification to the agent (run async without blocking response)
+    (async () => {
+      try {
+        const clientUser: any = await User.findById(message.senderId).lean();
+        if (clientUser) {
+          await sendMessageAssignedNotification(
+            session.user.email || '',
+            session.user.name || 'Agent',
+            clientUser.name,
+            message.subject,
+            id
+          );
+        }
+      } catch (emailError) {
+        console.error("Error sending message assigned email notification:", emailError);
+        // Don't fail the request if email fails
+      }
+    })();
 
     return NextResponse.json({
       success: true,

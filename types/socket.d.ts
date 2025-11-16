@@ -12,6 +12,7 @@ export interface ServerToClientEvents {
   'message:status-updated': (data: StatusUpdateData) => void
   'message:was-accepted': (data: AcceptedMessageData) => void
   'message:marked-read': (data: ReadReceiptData) => void
+  'message:marked-delivered': (data: DeliveryReceiptData) => void
   'message:created': (data: MessageCreatedData) => void
   'message:list-updated': (data: MessageListUpdateData) => void
 
@@ -107,6 +108,16 @@ export interface ReadReceiptData {
   messageId: string
   userId: string
   userName?: string
+  userRole?: string
+  readAt?: string
+}
+
+export interface DeliveryReceiptData {
+  messageId: string
+  userId: string
+  userName?: string
+  userRole?: string
+  deliveredAt?: string
 }
 
 export interface UserPresenceData {

@@ -409,6 +409,7 @@ export function AdminChatWindow({
         createdAt: message.createdAt,
         attachments: message.attachments,
         isEdited: message.isEdited,
+        fullData: message, // Include full message data for status tracking
       },
       ...message.replies.map((reply, index) => ({
         id: reply._id || `${message._id}-reply-temp-${index}`,
@@ -420,6 +421,7 @@ export function AdminChatWindow({
         createdAt: reply.createdAt,
         attachments: reply.attachments,
         isEdited: reply.isEdited,
+        fullData: reply, // Include full reply data for status tracking
       })),
     ];
   }, [message]);
@@ -689,22 +691,41 @@ export function AdminChatWindow({
                 </div>
 
                 {/* Messages for this date */}
-                {msgs.map((msg: any) => (
-                  <MessageBubble
-                    key={msg.id}
-                    messageId={message._id}
-                    replyId={msg.replyId}
-                    content={msg.content}
-                    timestamp={msg.createdAt}
-                    isOwnMessage={msg.senderId === session?.user?.id}
-                    senderName={msg.senderName}
-                    isRead={false}
-                    attachments={msg.attachments}
-                    isEdited={msg.isEdited}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                  />
-                ))}
+                {msgs.map((msg: any) => {
+                  const isOwnMessage = msg.senderId === session?.user?.id;
+
+                  // Determine recipient: the person who should receive/read the message
+                  let recipientId: string | undefined;
+                  if (isOwnMessage) {
+                    // I sent this message, so recipient is the other party
+                    if (msg.senderRole === 'client') {
+                      // Client sent message → recipient is agent/admin
+                      recipientId = message.assignedTo?.toString();
+                    } else {
+                      // Agent/admin sent reply → recipient is client
+                      recipientId = message.senderId?.toString();
+                    }
+                  }
+
+                  return (
+                    <MessageBubble
+                      key={msg.id}
+                      messageId={message._id}
+                      replyId={msg.replyId}
+                      content={msg.content}
+                      timestamp={msg.createdAt}
+                      isOwnMessage={isOwnMessage}
+                      senderName={msg.senderName}
+                      isRead={false}
+                      attachments={msg.attachments}
+                      isEdited={msg.isEdited}
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                      messageData={msg.fullData}
+                      recipientId={recipientId}
+                    />
+                  );
+                })}
               </div>
             ))}
             <div ref={messagesEndRef} />

@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { Message } from "@/lib/db/models/Message";
+import { User } from "@/lib/db/models/User";
 import { connectToDatabase } from "@/lib/db/mongoose";
+import { sendMessageStatusChangeNotification } from "@/lib/email";
 
 // PATCH /api/messages/[id]/status - Update message status
 export async function PATCH(
@@ -60,6 +62,9 @@ export async function PATCH(
     }
     // Admins can update any message status (no restriction)
 
+    // Store old status for email notification
+    const oldStatus = message.status;
+
     // Update status
     message.status = status;
     await message.save();
@@ -72,6 +77,26 @@ export async function PATCH(
         status,
       });
     }
+
+    // Send email notification to the client (run async without blocking response)
+    (async () => {
+      try {
+        const clientUser: any = await User.findById(message.senderId).lean();
+        if (clientUser) {
+          await sendMessageStatusChangeNotification(
+            clientUser.email,
+            clientUser.name,
+            message.subject,
+            oldStatus,
+            status,
+            id
+          );
+        }
+      } catch (emailError) {
+        console.error("Error sending status change email notification:", emailError);
+        // Don't fail the request if email fails
+      }
+    })();
 
     return NextResponse.json({
       success: true,

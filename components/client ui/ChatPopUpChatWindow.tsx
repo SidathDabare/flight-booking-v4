@@ -50,6 +50,7 @@ interface Message {
   senderName: string;
   senderRole: string;
   senderId: string;
+  assignedTo?: string;
   assignedToName?: string;
   attachments?: string[];
   createdAt: string;
@@ -68,6 +69,7 @@ interface MessageItem {
   createdAt: string;
   attachments?: string[];
   isEdited?: boolean;
+  fullData?: any; // Full message/reply data for status tracking
 }
 
 interface ChatWindowProps {
@@ -377,6 +379,7 @@ export function ChatPopUpChatWindow({
         createdAt: message.createdAt,
         attachments: message.attachments,
         isEdited: message.isEdited,
+        fullData: message, // Include full message data for status tracking
       },
       ...message.replies.map((reply, index) => ({
         id: reply._id || `${message._id}-reply-temp-${index}`,
@@ -388,6 +391,7 @@ export function ChatPopUpChatWindow({
         createdAt: reply.createdAt,
         attachments: reply.attachments,
         isEdited: reply.isEdited,
+        fullData: reply, // Include full reply data for status tracking
       })),
     ];
   }, [message]);
@@ -539,12 +543,40 @@ export function ChatPopUpChatWindow({
       }
     };
 
+    // Listen for message marked as read
+    const handleMessageMarkedRead = (data: unknown) => {
+      console.log("👁️ Message marked as read:", data);
+      if (
+        typeof data === "object" &&
+        data !== null &&
+        "messageId" in data &&
+        data.messageId === messageId
+      ) {
+        fetchMessage(); // Refresh to get updated readBy status
+      }
+    };
+
+    // Listen for message marked as delivered
+    const handleMessageMarkedDelivered = (data: unknown) => {
+      console.log("📫 Message marked as delivered:", data);
+      if (
+        typeof data === "object" &&
+        data !== null &&
+        "messageId" in data &&
+        data.messageId === messageId
+      ) {
+        fetchMessage(); // Refresh to get updated deliveredTo status
+      }
+    };
+
     // Register event listeners
     socket.on("message:new-reply", handleNewReply);
     socket.on("message:was-edited", handleMessageEdited);
     socket.on("message:was-deleted", handleMessageDeleted);
     socket.on("message:status-updated", handleStatusUpdate);
     socket.on("message:was-accepted", handleMessageAccepted);
+    socket.on("message:marked-read", handleMessageMarkedRead);
+    socket.on("message:marked-delivered", handleMessageMarkedDelivered);
 
     // Cleanup on unmount
     return () => {
@@ -555,6 +587,8 @@ export function ChatPopUpChatWindow({
       socket.off("message:was-deleted", handleMessageDeleted);
       socket.off("message:status-updated", handleStatusUpdate);
       socket.off("message:was-accepted", handleMessageAccepted);
+      socket.off("message:marked-read", handleMessageMarkedRead);
+      socket.off("message:marked-delivered", handleMessageMarkedDelivered);
     };
   }, [socket, messageId, fetchMessage]);
 
@@ -660,22 +694,41 @@ export function ChatPopUpChatWindow({
                 </div>
 
                 {/* Messages for this date */}
-                {msgs.map((msg: MessageItem) => (
-                  <MessageBubble
-                    key={msg.id}
-                    messageId={message._id}
-                    replyId={msg.replyId}
-                    content={msg.content}
-                    timestamp={msg.createdAt}
-                    isOwnMessage={msg.senderId === session?.user?.id}
-                    senderName={msg.senderName}
-                    isRead={false}
-                    attachments={msg.attachments}
-                    isEdited={msg.isEdited}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                  />
-                ))}
+                {msgs.map((msg: MessageItem) => {
+                  const isOwnMessage = msg.senderId === session?.user?.id;
+
+                  // Determine recipient: the person who should receive/read the message
+                  let recipientId: string | undefined;
+                  if (isOwnMessage) {
+                    // I sent this message, so recipient is the other party
+                    if (msg.senderRole === 'client') {
+                      // Client sent message → recipient is agent/admin
+                      recipientId = message.assignedTo?.toString();
+                    } else {
+                      // Agent/admin sent reply → recipient is client
+                      recipientId = message.senderId?.toString();
+                    }
+                  }
+
+                  return (
+                    <MessageBubble
+                      key={msg.id}
+                      messageId={message._id}
+                      replyId={msg.replyId}
+                      content={msg.content}
+                      timestamp={msg.createdAt}
+                      isOwnMessage={isOwnMessage}
+                      senderName={msg.senderName}
+                      isRead={false}
+                      attachments={msg.attachments}
+                      isEdited={msg.isEdited}
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                      messageData={msg.fullData}
+                      recipientId={recipientId}
+                    />
+                  );
+                })}
               </div>
             ))}
             <div ref={messagesEndRef} />

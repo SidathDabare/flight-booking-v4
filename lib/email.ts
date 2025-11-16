@@ -1,7 +1,11 @@
 import { Resend } from "resend";
 import {
   getPasswordResetTemplate,
-  getPasswordResetConfirmationTemplate
+  getPasswordResetConfirmationTemplate,
+  getNewMessageNotificationTemplate,
+  getNewReplyNotificationTemplate,
+  getMessageAssignedNotificationTemplate,
+  getMessageStatusChangeNotificationTemplate,
 } from "./email-templates";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -173,5 +177,131 @@ export async function sendPasswordResetConfirmation(email: string, name: string)
   } catch (error) {
     console.error("Error sending password reset confirmation:", error);
     // Don't throw error for confirmation email - it's not critical
+  }
+}
+
+export async function sendNewMessageNotification(
+  recipientEmail: string,
+  recipientName: string,
+  senderName: string,
+  subject: string,
+  messageId: string
+) {
+  try {
+    const messageUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/admin/messages?id=${messageId}`;
+
+    await resend.emails.send({
+      from: process.env.EMAIL_FROM || "onboarding@resend.dev",
+      to: recipientEmail,
+      subject: `New Message: ${subject}`,
+      html: getNewMessageNotificationTemplate(
+        recipientName,
+        senderName,
+        subject,
+        messageUrl
+      ),
+    });
+  } catch (error) {
+    console.error("Error sending new message notification:", error);
+    // Don't throw error - email is not critical for the operation
+  }
+}
+
+export async function sendNewReplyNotification(
+  recipientEmail: string,
+  recipientName: string,
+  senderName: string,
+  subject: string,
+  replyContent: string,
+  messageId: string,
+  recipientRole: string
+) {
+  try {
+    // Determine the correct URL based on recipient role
+    let messageUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}`;
+    if (recipientRole === 'client') {
+      messageUrl += `/client/messages?id=${messageId}`;
+    } else if (recipientRole === 'agent') {
+      messageUrl += `/agent/messages?id=${messageId}`;
+    } else {
+      messageUrl += `/admin/messages?id=${messageId}`;
+    }
+
+    // Create reply preview (first 100 characters)
+    const replyPreview = replyContent.length > 100
+      ? replyContent.substring(0, 100) + '...'
+      : replyContent;
+
+    await resend.emails.send({
+      from: process.env.EMAIL_FROM || "onboarding@resend.dev",
+      to: recipientEmail,
+      subject: `New Reply: ${subject}`,
+      html: getNewReplyNotificationTemplate(
+        recipientName,
+        senderName,
+        subject,
+        replyPreview,
+        messageUrl
+      ),
+    });
+  } catch (error) {
+    console.error("Error sending new reply notification:", error);
+    // Don't throw error - email is not critical for the operation
+  }
+}
+
+export async function sendMessageAssignedNotification(
+  agentEmail: string,
+  agentName: string,
+  clientName: string,
+  subject: string,
+  messageId: string
+) {
+  try {
+    const messageUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/agent/messages?id=${messageId}`;
+
+    await resend.emails.send({
+      from: process.env.EMAIL_FROM || "onboarding@resend.dev",
+      to: agentEmail,
+      subject: `Message Assigned: ${subject}`,
+      html: getMessageAssignedNotificationTemplate(
+        agentName,
+        clientName,
+        subject,
+        messageUrl
+      ),
+    });
+  } catch (error) {
+    console.error("Error sending message assigned notification:", error);
+    // Don't throw error - email is not critical for the operation
+  }
+}
+
+export async function sendMessageStatusChangeNotification(
+  clientEmail: string,
+  clientName: string,
+  subject: string,
+  oldStatus: string,
+  newStatus: string,
+  messageId: string
+) {
+  try {
+    const messageUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/client/messages?id=${messageId}`;
+
+    await resend.emails.send({
+      from: process.env.EMAIL_FROM || "onboarding@resend.dev",
+      to: clientEmail,
+      subject: `Message Status Updated: ${subject}`,
+      html: getMessageStatusChangeNotificationTemplate(
+        clientName,
+        subject,
+        oldStatus,
+        newStatus,
+        messageUrl
+      ),
+    });
+  } catch (error) {
+    console.error("Error sending status change notification:", error);
+    // Don't throw error - email is not critical for the operation
   }
 }

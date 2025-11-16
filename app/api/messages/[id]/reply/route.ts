@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { Message } from "@/lib/db/models/Message";
+import { User } from "@/lib/db/models/User";
 import { connectToDatabase } from "@/lib/db/mongoose";
+import { sendNewReplyNotification } from "@/lib/email";
 
 // POST /api/messages/[id]/reply - Add reply to a message
 export async function POST(
@@ -125,6 +127,46 @@ export async function POST(
         });
       }
     }
+
+    // Send email notification to the recipient (run async without blocking response)
+    (async () => {
+      try {
+        if (userRole === 'client') {
+          // Client replied - notify the assigned agent/admin
+          if (message.assignedTo) {
+            const assignedUser: any = await User.findById(message.assignedTo).lean();
+            if (assignedUser) {
+              await sendNewReplyNotification(
+                assignedUser.email,
+                assignedUser.name,
+                session.user.name || 'Client',
+                message.subject,
+                content.trim(),
+                id,
+                assignedUser.role
+              );
+            }
+          }
+        } else {
+          // Agent/admin replied - notify the client
+          const clientUser: any = await User.findById(message.senderId).lean();
+          if (clientUser) {
+            await sendNewReplyNotification(
+              clientUser.email,
+              clientUser.name,
+              session.user.name || 'Support Team',
+              message.subject,
+              content.trim(),
+              id,
+              clientUser.role
+            );
+          }
+        }
+      } catch (emailError) {
+        console.error("Error sending reply email notification:", emailError);
+        // Don't fail the request if email fails
+      }
+    })();
 
     return NextResponse.json({
       success: true,

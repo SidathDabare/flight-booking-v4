@@ -37,132 +37,20 @@ export function UnreadMessagesProvider({ children }: UnreadMessagesProviderProps
   const socket = useSocket()
   const [unreadCount, setUnreadCount] = useState(0)
 
-  // Fetch unread message count with improved tracking
+  // Fetch unread message count from database-backed API
   const fetchUnreadCount = useCallback(async () => {
-    if (session?.user?.id && session.user.role === "client") {
+    if (session?.user?.id) {
       try {
-        // Fetch messages directly to calculate accurate unread count
-        const response = await fetch("/api/messages", {
+        // Use the new unread-count API that uses database tracking
+        const response = await fetch("/api/messages/unread-count", {
           cache: "no-store",
         })
 
         if (response.ok) {
-          const data = await response.json() as MessagesResponse
+          const data = await response.json()
 
-          if (data.success && data.messages.length > 0) {
-            let totalCount = 0
-
-            // Count unread messages across ALL threads
-            data.messages.forEach((thread: MessageThread) => {
-              // Get last seen message from localStorage (synced with popup)
-              const lastSeenMessageId = typeof window !== 'undefined'
-                ? localStorage.getItem(`lastSeenMessage_${session.user.id}_${thread._id}`)
-                : null
-
-              // Build array of all messages
-              const allMessages = [
-                {
-                  id: thread._id,
-                  senderRole: thread.senderRole,
-                },
-                ...thread.replies.map((reply: MessageReply, index: number) => ({
-                  id: reply._id || `${thread._id}-reply-${index}`,
-                  senderRole: reply.senderRole,
-                })),
-              ]
-
-              // Debug logging
-              // console.log('🔍 Unread Count Calculation for thread:', {
-              //   threadId: thread._id,
-              //   lastSeenMessageId,
-              //   totalMessages: allMessages.length,
-              //   allMessageIds: allMessages.map(m => ({ id: m.id, role: m.senderRole }))
-              // })
-
-              // Find last seen index
-              let lastSeenIndex = -1
-              if (lastSeenMessageId) {
-                lastSeenIndex = allMessages.findIndex(msg => msg.id === lastSeenMessageId)
-                // console.log('📍 Last seen index:', lastSeenIndex)
-              }
-
-              // Count unread messages from agent/admin
-              for (let i = lastSeenIndex + 1; i < allMessages.length; i++) {
-                if (allMessages[i].senderRole !== "client") {
-                  totalCount++
-                }
-              }
-            })
-
-            // console.log('✉️ Total unread count across all threads:', totalCount)
-            setUnreadCount(totalCount)
-          } else {
-            setUnreadCount(0)
-          }
-        } else {
-          console.error("Failed to fetch unread count: HTTP", response.status)
-          // Keep current count on error, don't reset to 0
-        }
-      } catch (error) {
-        console.error("Failed to fetch unread count:", error)
-        // Keep current count on error, don't reset to 0
-      }
-    } else if (session?.user?.id && (session.user.role === "agent" || session.user.role === "admin")) {
-      // For agents/admins, use localStorage-based tracking like clients
-      try {
-        const response = await fetch("/api/messages", {
-          cache: "no-store",
-        })
-
-        if (response.ok) {
-          const data = await response.json() as MessagesResponse
-
-          if (data.success && data.messages.length > 0) {
-            let count = 0
-
-            // Count unread messages for each thread
-            data.messages.forEach((message: MessageThread) => {
-              // Get last seen message from localStorage for this thread
-              const lastSeenMessageId = typeof window !== 'undefined'
-                ? localStorage.getItem(`lastSeenMessage_${session.user.id}_${message._id}`)
-                : null
-
-              // Check if this message is unread (last message is from client)
-              if (!message.replies || message.replies.length === 0) {
-                // No replies yet, check if original message is from client and not seen
-                if (message.senderRole === "client" && !lastSeenMessageId) {
-                  count++
-                }
-              } else {
-                // Build array of all messages
-                const allMessages = [
-                  {
-                    id: message._id,
-                    senderRole: message.senderRole,
-                  },
-                  ...message.replies.map((reply: MessageReply, index: number) => ({
-                    id: reply._id || `${message._id}-reply-${index}`,
-                    senderRole: reply.senderRole,
-                  })),
-                ]
-
-                // Find last seen index
-                let lastSeenIndex = -1
-                if (lastSeenMessageId) {
-                  lastSeenIndex = allMessages.findIndex(msg => msg.id === lastSeenMessageId)
-                }
-
-                // Count unread messages from client
-                for (let i = lastSeenIndex + 1; i < allMessages.length; i++) {
-                  if (allMessages[i].senderRole === "client") {
-                    count++
-                  }
-                }
-              }
-            })
-
-            // console.log('✉️ Admin/Agent unread count:', count)
-            setUnreadCount(count)
+          if (data.success) {
+            setUnreadCount(data.unreadCount || 0)
           } else {
             setUnreadCount(0)
           }
@@ -188,25 +76,35 @@ export function UnreadMessagesProvider({ children }: UnreadMessagesProviderProps
     }
   }, [fetchUnreadCount])()  // Immediately invoke to get the debounced function
 
-  // Mark messages as read and update count
-  const markAsRead = useCallback((threadId: string, lastMessageId: string) => {
-    // console.log('📢 markAsRead called for thread:', threadId, 'lastMessageId:', lastMessageId)
-    if (typeof window !== 'undefined' && session?.user?.id) {
-      // Save to localStorage
-      const key = `lastSeenMessage_${session.user.id}_${threadId}`
-      localStorage.setItem(key, lastMessageId)
-      // console.log('💾 Saved to localStorage:', key, '=', lastMessageId)
-
-      // Dispatch custom event for cross-component synchronization
-      window.dispatchEvent(
-        new CustomEvent("unreadMessagesUpdated", {
-          detail: { userId: session.user.id, threadId, lastMessageId },
+  // Mark messages as read using database API
+  const markAsRead = useCallback(async (threadId: string, lastMessageId: string) => {
+    if (session?.user?.id) {
+      try {
+        // Call the mark-read API endpoint
+        const response = await fetch(`/api/messages/${threadId}/mark-read`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         })
-      )
-      // console.log('✅ Dispatched unreadMessagesUpdated event')
 
-      // Immediately refresh count
-      fetchUnreadCount()
+        if (response.ok) {
+          // Refresh unread count after marking as read
+          await fetchUnreadCount()
+
+          // Dispatch custom event for cross-component synchronization
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(
+              new CustomEvent("unreadMessagesUpdated", {
+                detail: { userId: session.user.id, threadId, lastMessageId },
+              })
+            )
+          }
+        }
+        // Silently fail - no need to log in production
+      } catch (err) {
+        // Silently fail - no need to log in production
+      }
     }
   }, [session, fetchUnreadCount])
 

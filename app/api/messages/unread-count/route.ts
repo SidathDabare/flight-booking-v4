@@ -16,64 +16,102 @@ export async function GET(request: NextRequest) {
     await connectToDatabase();
 
     const userRole = session.user.role as string;
+    const userId = session.user.id;
     let unreadCount = 0;
 
     if (userRole === "client") {
-      // For clients: count messages with new replies from agents/admins
+      // For clients: count messages with unread replies from agents/admins
       const messages = await Message.find({
-        senderId: session.user.id,
+        senderId: userId,
       }).lean();
 
-      // Count messages that have replies after the last client reply
       messages.forEach((message) => {
+        const lastReadAt = message.lastReadByClient || new Date(0); // Default to epoch if never read
+        let hasUnread = false;
+
+        // Check if there are unread replies from agents/admins
         if (message.replies && message.replies.length > 0) {
-          // Find the last reply from the client
-          let lastClientReplyIndex = -1;
-          for (let i = message.replies.length - 1; i >= 0; i--) {
+          for (const reply of message.replies) {
+            // Check if reply is from agent/admin and is newer than last read time
             if (
-              message.replies[i].senderRole === "client" &&
-              message.replies[i].senderId.toString() === session.user.id
+              (reply.senderRole === "agent" || reply.senderRole === "admin") &&
+              new Date(reply.createdAt) > lastReadAt
             ) {
-              lastClientReplyIndex = i;
+              hasUnread = true;
               break;
             }
           }
+        }
 
-          // Check if there are any replies after the client's last reply
-          if (lastClientReplyIndex === -1) {
-            // Client hasn't replied yet, check if there are any agent/admin replies
-            const hasAgentReply = message.replies.some(
-              (reply: IReply) => reply.senderRole === "agent" || reply.senderRole === "admin"
-            );
-            if (hasAgentReply) {
-              unreadCount++;
-            }
-          } else if (lastClientReplyIndex < message.replies.length - 1) {
-            // There are replies after client's last reply
-            unreadCount++;
-          }
+        if (hasUnread) {
+          unreadCount++;
         }
       });
-    } else if (userRole === "agent" || userRole === "admin") {
-      // For agents/admins: count all messages where the last message is from a client (WhatsApp-style)
-      const allMessages = await Message.find({
+    } else if (userRole === "agent") {
+      // For agents: count messages assigned to them with unread replies from clients
+      const messages = await Message.find({
+        assignedTo: userId,
+        status: { $in: ["accepted", "resolved"] },
+      }).lean();
+
+      messages.forEach((message) => {
+        const lastReadAt = message.lastReadByAgent || new Date(0); // Default to epoch if never read
+        let hasUnread = false;
+
+        // Check original message if it's newer than last read
+        if (new Date(message.createdAt) > lastReadAt && message.senderRole === "client") {
+          hasUnread = true;
+        }
+
+        // Check if there are unread replies from client
+        if (!hasUnread && message.replies && message.replies.length > 0) {
+          for (const reply of message.replies) {
+            // Check if reply is from client and is newer than last read time
+            if (
+              reply.senderRole === "client" &&
+              new Date(reply.createdAt) > lastReadAt
+            ) {
+              hasUnread = true;
+              break;
+            }
+          }
+        }
+
+        if (hasUnread) {
+          unreadCount++;
+        }
+      });
+    } else if (userRole === "admin") {
+      // For admins: count all messages with unread client messages/replies
+      const messages = await Message.find({
         status: { $in: ["pending", "accepted", "resolved"] },
       }).lean();
 
-      allMessages.forEach((message) => {
-        // Check if this message is unread (last message is from client)
-        if (!message.replies || message.replies.length === 0) {
-          // No replies yet, check if original message is from client
-          if (message.senderRole === "client") {
-            unreadCount++;
+      messages.forEach((message) => {
+        const lastReadAt = message.lastReadByAgent || new Date(0); // Admins use agent read tracking
+        let hasUnread = false;
+
+        // Check original message if it's newer than last read
+        if (new Date(message.createdAt) > lastReadAt && message.senderRole === "client") {
+          hasUnread = true;
+        }
+
+        // Check if there are unread replies from client
+        if (!hasUnread && message.replies && message.replies.length > 0) {
+          for (const reply of message.replies) {
+            // Check if reply is from client and is newer than last read time
+            if (
+              reply.senderRole === "client" &&
+              new Date(reply.createdAt) > lastReadAt
+            ) {
+              hasUnread = true;
+              break;
+            }
           }
-        } else {
-          // Get the last reply
-          const lastReply = message.replies[message.replies.length - 1];
-          // If last reply is from client, it's unread
-          if (lastReply.senderRole === "client") {
-            unreadCount++;
-          }
+        }
+
+        if (hasUnread) {
+          unreadCount++;
         }
       });
     }

@@ -3,8 +3,6 @@
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import {
-  Check,
-  CheckCheck,
   Trash2,
   Download,
   FileText,
@@ -14,6 +12,8 @@ import {
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { MessageStatusIcon } from "@/lib/message-status-utils";
+import type { IMessage, IReply } from "@/lib/db/models/Message";
 
 // Generates a consistent color for a given username using hash
 const getUserColor = (name: string): string => {
@@ -84,6 +84,10 @@ interface MessageBubbleProps {
   isEdited?: boolean;
   onEdit?: (messageId: string, replyId?: string, content?: string) => void;
   onDelete?: (messageId: string, replyId?: string) => void;
+  // New props for delivery/read status
+  messageData?: Partial<IMessage> | Partial<IReply>;
+  recipientId?: string;
+  recipientRole?: 'client' | 'agent' | 'admin';
 }
 
 export function MessageBubble({
@@ -98,6 +102,9 @@ export function MessageBubble({
   isEdited = false,
   onEdit,
   onDelete,
+  messageData,
+  recipientId,
+  recipientRole,
 }: MessageBubbleProps) {
   const [showActions, setShowActions] = useState(false);
 
@@ -340,13 +347,14 @@ export function MessageBubble({
             )}
           >
             <span className="text-xs">{formatTime(timestamp)}</span>
-            {isOwnMessage && (
+            {isOwnMessage && messageData && recipientId && (
               <span className="inline-flex">
-                {isRead ? (
-                  <CheckCheck className="h-3 w-3" />
-                ) : (
-                  <Check className="h-3 w-3" />
-                )}
+                <MessageStatusIcon
+                  message={messageData}
+                  recipientId={recipientId}
+                  recipientRole={recipientRole}
+                  size={14}
+                />
               </span>
             )}
           </div>

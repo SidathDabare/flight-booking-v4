@@ -141,3 +141,163 @@ export function getPasswordResetConfirmationTemplate(name: string) {
     </div>
   `;
 }
+
+export function getNewMessageNotificationTemplate(
+  recipientName: string,
+  senderName: string,
+  subject: string,
+  messageUrl: string
+) {
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <h2 style="color: #007bff; text-align: center;">New Message Received</h2>
+      <p>Hi ${recipientName},</p>
+
+      <p>You have received a new message from <strong>${senderName}</strong>.</p>
+
+      <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #007bff;">
+        <h3 style="margin-top: 0; color: #333;">Subject:</h3>
+        <p style="margin: 0; font-size: 16px; color: #555;">${subject}</p>
+      </div>
+
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="${messageUrl}"
+           style="background-color: #007bff; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
+          View Message
+        </a>
+      </div>
+
+      <p style="color: #666; font-size: 14px;">Or copy and paste this link into your browser:</p>
+      <p style="word-break: break-all; color: #007bff; font-size: 14px;">${messageUrl}</p>
+
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 14px;">
+        <p>Best regards,<br>Flight Booking Team</p>
+      </div>
+    </div>
+  `;
+}
+
+export function getNewReplyNotificationTemplate(
+  recipientName: string,
+  senderName: string,
+  subject: string,
+  replyPreview: string,
+  messageUrl: string
+) {
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <h2 style="color: #28a745; text-align: center;">New Reply to Your Message</h2>
+      <p>Hi ${recipientName},</p>
+
+      <p><strong>${senderName}</strong> has replied to your message.</p>
+
+      <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #28a745;">
+        <h3 style="margin-top: 0; color: #333;">Subject:</h3>
+        <p style="margin: 0 0 10px 0; font-size: 16px; color: #555;">${subject}</p>
+        <h4 style="margin-top: 15px; margin-bottom: 5px; color: #333;">Reply Preview:</h4>
+        <p style="margin: 0; color: #666; font-style: italic;">${replyPreview}</p>
+      </div>
+
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="${messageUrl}"
+           style="background-color: #28a745; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
+          View Full Conversation
+        </a>
+      </div>
+
+      <p style="color: #666; font-size: 14px;">Or copy and paste this link into your browser:</p>
+      <p style="word-break: break-all; color: #28a745; font-size: 14px;">${messageUrl}</p>
+
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 14px;">
+        <p>Best regards,<br>Flight Booking Team</p>
+      </div>
+    </div>
+  `;
+}
+
+export function getMessageAssignedNotificationTemplate(
+  agentName: string,
+  clientName: string,
+  subject: string,
+  messageUrl: string
+) {
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <h2 style="color: #17a2b8; text-align: center;">New Message Assigned</h2>
+      <p>Hi ${agentName},</p>
+
+      <p>A new message from <strong>${clientName}</strong> has been assigned to you.</p>
+
+      <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #17a2b8;">
+        <h3 style="margin-top: 0; color: #333;">Subject:</h3>
+        <p style="margin: 0; font-size: 16px; color: #555;">${subject}</p>
+      </div>
+
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="${messageUrl}"
+           style="background-color: #17a2b8; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
+          View & Respond
+        </a>
+      </div>
+
+      <p style="color: #666; font-size: 14px;">Or copy and paste this link into your browser:</p>
+      <p style="word-break: break-all; color: #17a2b8; font-size: 14px;">${messageUrl}</p>
+
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 14px;">
+        <p>Please respond to the client as soon as possible.</p>
+        <p>Best regards,<br>Flight Booking Team</p>
+      </div>
+    </div>
+  `;
+}
+
+export function getMessageStatusChangeNotificationTemplate(
+  clientName: string,
+  subject: string,
+  oldStatus: string,
+  newStatus: string,
+  messageUrl: string
+) {
+  const statusColors: Record<string, string> = {
+    pending: "#ffc107",
+    accepted: "#17a2b8",
+    resolved: "#28a745",
+    closed: "#6c757d",
+  };
+
+  const statusColor = statusColors[newStatus] || "#007bff";
+
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <h2 style="color: ${statusColor}; text-align: center;">Message Status Updated</h2>
+      <p>Hi ${clientName},</p>
+
+      <p>The status of your message has been updated.</p>
+
+      <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid ${statusColor};">
+        <h3 style="margin-top: 0; color: #333;">Subject:</h3>
+        <p style="margin: 0 0 15px 0; font-size: 16px; color: #555;">${subject}</p>
+        <h4 style="margin: 10px 0 5px 0; color: #333;">Status Change:</h4>
+        <p style="margin: 0;">
+          <span style="background-color: #e9ecef; padding: 5px 10px; border-radius: 3px; text-transform: capitalize;">${oldStatus}</span>
+          <span style="margin: 0 10px;">→</span>
+          <span style="background-color: ${statusColor}; color: white; padding: 5px 10px; border-radius: 3px; text-transform: capitalize;">${newStatus}</span>
+        </p>
+      </div>
+
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="${messageUrl}"
+           style="background-color: ${statusColor}; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
+          View Message
+        </a>
+      </div>
+
+      <p style="color: #666; font-size: 14px;">Or copy and paste this link into your browser:</p>
+      <p style="word-break: break-all; color: ${statusColor}; font-size: 14px;">${messageUrl}</p>
+
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 14px;">
+        <p>Best regards,<br>Flight Booking Team</p>
+      </div>
+    </div>
+  `;
+}

@@ -1,5 +1,15 @@
 import mongoose, { Document, Schema } from "mongoose";
 
+export interface IReadReceipt {
+  userId: mongoose.Types.ObjectId;
+  readAt: Date;
+}
+
+export interface IDeliveryReceipt {
+  userId: mongoose.Types.ObjectId;
+  deliveredAt: Date;
+}
+
 export interface IReply {
   _id: mongoose.Types.ObjectId;
   senderId: mongoose.Types.ObjectId;
@@ -10,6 +20,8 @@ export interface IReply {
   createdAt: Date;
   updatedAt?: Date;
   isEdited?: boolean;
+  deliveredTo?: IDeliveryReceipt[];  // NEW: Track delivery status
+  readBy?: IReadReceipt[];
 }
 
 export interface IMessage extends Document {
@@ -28,7 +40,45 @@ export interface IMessage extends Document {
   createdAt: Date;
   updatedAt: Date;
   isEdited?: boolean;
+  deliveredTo?: IDeliveryReceipt[];  // NEW: Track delivery status
+  readBy?: IReadReceipt[];
+  lastReadByClient?: Date;
+  lastReadByAgent?: Date;
+  lastDeliveredToClient?: Date;  // NEW: Last time delivered to client
+  lastDeliveredToAgent?: Date;   // NEW: Last time delivered to agent
 }
+
+const ReadReceiptSchema = new Schema(
+  {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    readAt: {
+      type: Date,
+      required: true,
+      default: Date.now,
+    },
+  },
+  { _id: false }
+);
+
+const DeliveryReceiptSchema = new Schema(
+  {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    deliveredAt: {
+      type: Date,
+      required: true,
+      default: Date.now,
+    },
+  },
+  { _id: false }
+);
 
 const ReplySchema = new Schema<IReply>(
   {
@@ -66,6 +116,14 @@ const ReplySchema = new Schema<IReply>(
     isEdited: {
       type: Boolean,
       default: false,
+    },
+    deliveredTo: {
+      type: [DeliveryReceiptSchema],
+      default: [],
+    },
+    readBy: {
+      type: [ReadReceiptSchema],
+      default: [],
     },
   },
   { _id: true }
@@ -131,6 +189,30 @@ const MessageSchema = new Schema<IMessage>(
     isEdited: {
       type: Boolean,
       default: false,
+    },
+    deliveredTo: {
+      type: [DeliveryReceiptSchema],
+      default: [],
+    },
+    readBy: {
+      type: [ReadReceiptSchema],
+      default: [],
+    },
+    lastReadByClient: {
+      type: Date,
+      default: null,
+    },
+    lastReadByAgent: {
+      type: Date,
+      default: null,
+    },
+    lastDeliveredToClient: {
+      type: Date,
+      default: null,
+    },
+    lastDeliveredToAgent: {
+      type: Date,
+      default: null,
     },
   },
   {

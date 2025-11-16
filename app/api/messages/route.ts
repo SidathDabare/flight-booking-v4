@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { Message } from "@/lib/db/models/Message";
+import { User } from "@/lib/db/models/User";
 import { connectToDatabase } from "@/lib/db/mongoose";
+import { sendNewMessageNotification } from "@/lib/email";
 
 // GET /api/messages - List messages (role-based)
 export async function GET(request: NextRequest) {
@@ -151,6 +153,30 @@ export async function POST(request: NextRequest) {
         action: 'message-created',
         timestamp: Date.now(),
       });
+    }
+
+    // Send email notifications to admins (run async without blocking response)
+    if (session.user.role === 'client') {
+      (async () => {
+        try {
+          // Get all admins
+          const admins = await User.find({ role: 'admin', isApproved: true }).lean();
+
+          // Send email to each admin
+          for (const admin of admins) {
+            await sendNewMessageNotification(
+              admin.email,
+              admin.name,
+              session.user.name || 'A client',
+              message.subject,
+              message._id.toString()
+            );
+          }
+        } catch (emailError) {
+          console.error("Error sending new message email notifications:", emailError);
+          // Don't fail the request if email fails
+        }
+      })();
     }
 
     return NextResponse.json({

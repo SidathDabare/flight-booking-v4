@@ -1,0 +1,7 @@
+# Claude Code Rules
+
+## File Organization
+
+- All completed task documentation files (*.md) should be automatically placed in `.claude/completed-tasks/` folder
+- Task reports, integration guides, improvement documentation, and audit reports belong in `.claude/completed-tasks/`
+- Do not create documentation .md files in the root directory unless they are core project files like README.md or CONTRIBUTING.md
