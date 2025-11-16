@@ -1,7 +1,867 @@
-# Claude Code Rules
+# Flight Booking Application - Claude Code Rules
+
+> **Quick Navigation:** [Critical Requirements](#critical-requirements---read-first) • [Tech Stack](#technology-stack) • [Code Style](#code-style--conventions) • [State Management](#state-management) • [Real-time Features](#real-time-features--messaging-patterns) • [Security](#security-best-practices) • [Performance](#performance-optimization)
+
+---
+
+## CRITICAL REQUIREMENTS - READ FIRST
+
+### 🔒 Production-Ready Code Standard
+**ALL code generated MUST be production-ready and follow these mandatory checks:**
+
+1. **Security Audit (MANDATORY)**
+   - After writing ANY code, perform a comprehensive security review
+   - Verify NO sensitive information is exposed in the frontend (API keys, secrets, credentials)
+   - Check for common vulnerabilities: XSS, SQL injection, CSRF, insecure authentication
+   - Ensure all user inputs are validated and sanitized
+   - Verify proper authorization checks are in place
+   - Confirm environment variables are used correctly (never hardcoded secrets)
+   - Check that API routes have proper authentication/authorization
+   - Validate that error messages don't leak sensitive information
+
+2. **Token Budget Awareness (MANDATORY)**
+   - BEFORE starting major implementations, estimate token usage
+   - Check remaining token budget (visible in system warnings)
+   - If implementation requires >30,000 tokens, confirm with user first
+   - Break large tasks into smaller chunks if needed
+   - Current session budget should always be monitored
+
+3. **Code Quality Standards**
+   - All code must be fully typed with TypeScript
+   - Comprehensive error handling with try-catch blocks
+   - Input validation using Zod schemas
+   - Proper loading and error states in UI
+   - Mobile-responsive and accessible
+   - Dark mode compatible
+   - Follows all patterns defined in this rules file
+
+### 🔐 Security Checklist (Run After Every Code Generation)
+```
+✓ No API keys, secrets, or credentials in client-side code
+✓ All environment variables properly accessed via process.env (server-side only)
+✓ User inputs validated with Zod schemas
+✓ SQL/NoSQL injection prevention (parameterized queries, Mongoose)
+✓ XSS prevention (React's built-in escaping + proper sanitization)
+✓ CSRF protection (NextAuth handles this)
+✓ Authentication checks on all protected routes
+✓ Authorization checks (role-based access control)
+✓ Secure password handling (bcrypt hashing)
+✓ Rate limiting considered for sensitive endpoints
+✓ Error messages don't expose system details
+✓ File uploads are validated and sanitized
+✓ Session tokens are httpOnly and secure
+✓ No sensitive data in console.log statements
+✓ Database queries don't expose unnecessary data
+```
+
+### 📊 Token Management Protocol
+- **Small changes** (<5,000 tokens): Proceed without warning
+- **Medium changes** (5,000-15,000 tokens): Mention estimated usage
+- **Large changes** (15,000-50,000 tokens): Get explicit confirmation
+- **Major refactors** (>50,000 tokens): Break into phases, confirm each phase
+
+### 📁 Completed Task Documentation (MANDATORY)
+**AFTER COMPLETING ANY SIGNIFICANT TASK:**
+- **ALWAYS** create a completion report as a `.md` file
+- **AUTOMATICALLY** save it to `.claude/completed-tasks/` folder
+- **NEVER** create task documentation in the root directory
+- Use descriptive kebab-case naming: `feature-name-implementation.md`
+- Include: Summary, Changes, Testing, Date
+- If you accidentally create a task .md file elsewhere, immediately move it to `.claude/completed-tasks/`
+
+**Examples:**
+```bash
+# ✅ CORRECT - Auto-organize to this location
+.claude/completed-tasks/whatsapp-messaging-implementation.md
+.claude/completed-tasks/socket-io-integration.md
+.claude/completed-tasks/payment-flow-update.md
+
+# ❌ WRONG - Never leave in root
+./TASK_COMPLETE.md  # Move to .claude/completed-tasks/
+./implementation-guide.md  # Move to .claude/completed-tasks/
+```
+
+---
+
+## Project Overview
+Next.js 15 flight booking platform with NextAuth authentication, MongoDB, Stripe payments, and Socket.IO real-time messaging. Uses TypeScript, Tailwind CSS with shadcn/ui components, and next-intl for internationalization.
+
+## Technology Stack
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript 5
+- **Styling**: Tailwind CSS 3.4+ with custom Stripe-inspired design system
+- **UI Library**: shadcn/ui (Radix UI primitives)
+- **Authentication**: NextAuth.js v4 with MongoDB adapter
+- **Database**: MongoDB with Mongoose
+- **Payments**: Stripe
+- **Real-time**: Socket.IO
+- **Forms**: React Hook Form + Zod validation
+- **State Management**: Zustand
+- **Internationalization**: next-intl
+- **Images**: next-cloudinary
+
+---
+
+## Code Style & Conventions
+
+### General Rules
+- Always use TypeScript with strict typing
+- Prefer functional components with React hooks
+- Use `"use client"` directive only when necessary (client components)
+- Use async/await for asynchronous operations
+- Always handle errors with try-catch blocks
+- Use meaningful variable and function names
+
+### File Naming
+- Components: PascalCase (e.g., `FlightSearch.tsx`, `UserAvatar.tsx`)
+- Utilities/Hooks: camelCase (e.g., `useScrollAnimation.ts`, `formatDate.ts`)
+- API Routes: kebab-case (e.g., `create-booking.ts`)
+- Pages: kebab-case (e.g., `ticket-details/page.tsx`)
+
+### Component Structure
+```typescript
+"use client"; // Only if needed
+
+import React from "react";
+import { ComponentProps } from "@/types"; // Type imports first
+import { Button } from "@/components/ui/button"; // UI components
+import { cn } from "@/lib/utils"; // Utilities last
+
+interface ComponentNameProps {
+  // Props definition
+}
+
+const ComponentName = ({ prop1, prop2 }: ComponentNameProps) => {
+  // Hooks at the top
+  // State declarations
+  // Event handlers
+  // Effects
+
+  return (
+    <div className="...">
+      {/* Component JSX */}
+    </div>
+  );
+};
+
+export default ComponentName;
+```
+
+### Import Order
+1. React and Next.js imports
+2. Third-party libraries
+3. Type imports
+4. UI components from `@/components/ui`
+5. Custom components
+6. Utils, hooks, and lib functions
+7. Types and constants
+
+### TypeScript Guidelines
+- Always define interfaces for component props
+- Use `type` for unions and `interface` for object shapes
+- Avoid `any` - use `unknown` or proper typing
+- Export types/interfaces when used across files
+- Use optional chaining (`?.`) and nullish coalescing (`??`)
+
+---
+
+## Design System
+
+### Colors
+- Use CSS variables via Tailwind: `bg-primary`, `text-foreground`, etc.
+- Custom Stripe-inspired colors available: `stripe-purple`, `stripe-blue-500`, etc.
+- Gray scale: `gray-50` to `gray-950`
+- Always support dark mode with appropriate color classes
+
+### Typography
+Use custom font size utilities:
+- Headings: `text-h1` to `text-h6`
+- Body: `text-body-lg`, `text-body`, `text-body-sm`
+- Display: `text-display`
+- Caption: `text-caption`
+
+### Spacing & Layout
+- Custom spacing scale: `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `3xl`, `4xl`, `5xl`, `6xl`
+- Border Radius: `rounded-lg` (16px), `rounded-md` (12px), `rounded-xl` (24px), `rounded-2xl` (32px)
+- Shadows: `shadow-stripe-sm`, `shadow-stripe-md`, `shadow-stripe-lg`, `shadow-stripe-xl`
+
+### Button Animations
+- Use `hover:-translate-y-0.5` for lift effect
+- Add `will-change-transform` for performance
+- Use `active:translate-y-0` for press effect
+
+### Responsive Design
+- Mobile-first approach
+- Breakpoints: `xs:`, `sm:`, `md:`, `lg:`, `xl:`, `2xl:`
+- Always test on multiple screen sizes
+
+### Dark Mode
+```typescript
+// Use Tailwind dark mode classes
+<div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+  {/* Content adapts to theme */}
+</div>
+```
+
+---
+
+## Component Patterns
+
+### Buttons
+```typescript
+import { Button } from "@/components/ui/button";
+
+<Button variant="default" size="lg">Click Me</Button>
+
+// Variants: default, destructive, outline, secondary, ghost, link
+// Sizes: default, sm, lg, icon
+```
+
+### Forms (React Hook Form + Zod)
+```typescript
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+
+const formSchema = z.object({
+  email: z.string().email(),
+});
+
+const MyForm = () => {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: { email: "" },
+  });
+
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    // Handle submission
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
+  );
+};
+```
+
+### Cards
+```typescript
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+<Card className="shadow-stripe-md rounded-xl">
+  <CardHeader>
+    <CardTitle>Title</CardTitle>
+    <CardDescription>Description</CardDescription>
+  </CardHeader>
+  <CardContent>{/* Content */}</CardContent>
+</Card>
+```
+
+### Dialogs/Modals
+```typescript
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+
+<Dialog>
+  <DialogTrigger asChild>
+    <Button>Open Dialog</Button>
+  </DialogTrigger>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Dialog Title</DialogTitle>
+    </DialogHeader>
+    {/* Dialog content */}
+  </DialogContent>
+</Dialog>
+```
+
+---
+
+## API Routes
+
+### Structure
+```typescript
+import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import dbConnect from "@/lib/mongodb";
+
+export async function GET(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    await dbConnect();
+
+    // Logic here
+
+    return NextResponse.json({ data: result });
+  } catch (error) {
+    console.error("Error:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+```
+
+### HTTP Status Codes
+- **200**: Success
+- **201**: Created
+- **400**: Bad Request
+- **401**: Unauthorized
+- **403**: Forbidden
+- **404**: Not Found
+- **500**: Internal Server Error
+
+---
+
+## Authentication & Authorization
+
+### Protected Routes
+Use middleware for route protection based on user roles (admin, agent, client).
+
+### Session Access
+```typescript
+// Client-side
+import { useSession } from "next-auth/react";
+const { data: session, status } = useSession();
+
+// Server-side
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+const session = await getServerSession(authOptions);
+```
+
+### Role-Based Access
+```typescript
+// Always check authentication
+const session = await getServerSession(authOptions);
+if (!session) {
+  return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+}
+
+// Always check authorization
+if (session.user.role !== "admin") {
+  return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+}
+
+// For agents, check approval status
+if (session.user.role === "agent" && !session.user.isApproved) {
+  return NextResponse.json({ error: "Pending approval" }, { status: 403 });
+}
+```
+
+---
+
+## Database (MongoDB + Mongoose)
+
+### Model Definition
+```typescript
+import mongoose from "mongoose";
+
+const Schema = new mongoose.Schema({
+  field: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+});
+
+export default mongoose.models.ModelName || mongoose.model("ModelName", Schema);
+```
+
+### Best Practices
+- Always use `dbConnect()` before database operations
+- Use indexes for frequently queried fields
+- Implement pagination for large result sets
+- Use `.select()` to fetch only needed fields
+- Avoid N+1 queries (use `.populate()` wisely)
+- Use `.lean()` for read-only operations
+
+---
+
+## Internationalization (next-intl)
+
+### Using Translations
+```typescript
+import { useTranslations } from "next-intl";
+
+const Component = () => {
+  const t = useTranslations("namespace");
+  return <h1>{t("key")}</h1>;
+};
+```
+
+---
+
+## State Management
+
+### Choosing the Right Pattern
+
+| Use Case | Pattern | Why |
+|----------|---------|-----|
+| Component tree state | React Context | Simple, no persistence needed |
+| Socket connections | React Context | Lifecycle tied to component tree |
+| Unread message counter | React Context + Socket.IO | Real-time updates, cross-tab sync |
+| Form state | React Hook Form | Built-in validation |
+| Global state without persistence | Zustand (no persist) | Simple global state |
+| **Global state with persistence** | **Zustand + persist** | **Survives refresh, TTL support** |
+| **Temporary user selections** | **Zustand + persist** | **Better UX, recoverable state** |
+
+### React Context Pattern
+```typescript
+import { createContext, useContext, useState, ReactNode } from "react";
+
+interface ContextState {
+  value: string;
+  setValue: (value: string) => void;
+}
+
+const MyContext = createContext<ContextState | undefined>(undefined);
+
+export const MyProvider = ({ children }: { children: ReactNode }) => {
+  const [value, setValue] = useState<string>("");
+  return (
+    <MyContext.Provider value={{ value, setValue }}>
+      {children}
+    </MyContext.Provider>
+  );
+};
+
+export const useMyContext = () => {
+  const context = useContext(MyContext);
+  if (!context) throw new Error("useMyContext must be used within MyProvider");
+  return context;
+};
+```
+
+**Real examples:** `lib/socket-context.tsx`, `lib/unread-messages-context.tsx`
+
+### Socket.IO Context Pattern
+Use React Context for managing Socket.IO connections with proper lifecycle management.
+
+**Key Features:**
+- Session-based connection (waits for NextAuth session)
+- Auto-reconnection with exponential backoff
+- Type-safe event handlers
+- Custom hooks for typing indicators
+
+**Real example:** `lib/socket-context.tsx`
+
+### Unread Messages Context Pattern
+Dedicated context for managing unread message counts with Socket.IO and cross-tab synchronization.
+
+**Key Features:**
+- Database-backed unread count (via API)
+- Socket.IO real-time updates (primary)
+- Debounced API calls to prevent redundancy
+- Cross-tab synchronization via localStorage events
+
+**Real example:** `lib/unread-messages-context.tsx`
+
+### Zustand with Persistence (TTL)
+```typescript
+import { create } from "zustand";
+import { persist, devtools } from "zustand/middleware";
+
+const EXPIRATION_MS = 20 * 60 * 1000; // 20 minutes
+
+const useMyStore = create<MyStore>()(
+  persist(
+    devtools(
+      (set, get) => ({
+        data: null,
+        timestamp: null,
+        setData: (data) => set({ data, timestamp: data ? Date.now() : null }),
+        clearExpired: () => {
+          const { timestamp, data } = get();
+          if (timestamp && data && Date.now() - timestamp > EXPIRATION_MS) {
+            set({ data: null, timestamp: null });
+            return true;
+          }
+          return false;
+        },
+      }),
+      { name: "My Store" }
+    ),
+    {
+      name: "my-storage",
+      storage: {
+        getItem: (name) => {
+          const str = localStorage.getItem(name);
+          if (!str) return null;
+          try {
+            const { state } = JSON.parse(str);
+            if (state.timestamp && Date.now() - state.timestamp > EXPIRATION_MS) {
+              localStorage.removeItem(name);
+              return null;
+            }
+            return str;
+          } catch {
+            return null;
+          }
+        },
+        setItem: (name, value) => localStorage.setItem(name, value),
+        removeItem: (name) => localStorage.removeItem(name),
+      },
+    }
+  )
+);
+```
+
+**Real examples:** `lib/store/use-flight-store.ts`, `lib/store/use-passenger-store.ts`
+
+### Zustand with PII Data (Special Considerations)
+⚠️ **When persisting Personally Identifiable Information (PII):**
+
+**Required Security Measures:**
+1. **Short TTL:** Maximum 20 minutes
+2. **User Warning:** Display banner informing users
+3. **Manual Clear:** Provide "Clear Now" button
+4. **Auto-Clear:** Remove after transaction completes
+5. **Never Store Payment Data:** Credit cards, CVV (PCI DSS violation)
+
+**GDPR Compliance:** ✅ User consent, ✅ Data minimization, ✅ Storage limitation, ✅ Right to erasure
+
+### Zustand with subscribeWithSelector
+Use when you need to observe specific state slices and trigger side effects (analytics, logging).
+
+**Middleware Order:**
+```typescript
+// ✅ CORRECT
+persist(subscribeWithSelector(devtools((set, get) => ({ /* state */ }))))
+
+// ❌ WRONG
+devtools(persist(subscribeWithSelector(...)))
+```
+
+---
+
+## Real-time Features & Messaging Patterns
+
+### WhatsApp-Style Message UI Pattern
+Two-pane layout with conversation list and chat window, responsive mobile/desktop behavior.
+
+**Key Features:**
+- Unread count badges
+- Last message preview
+- Time formatting (relative for recent, absolute for old)
+- Status indicators (pending, accepted, resolved, closed)
+- Search and filter capabilities
+
+**Real examples:** `components/admin/admin-messages-whatsapp.tsx`, `components/agent/agent-messages-whatsapp.tsx`
+
+### Message Delivery Status (WhatsApp-Style Checkmarks)
+**Status Types:**
+- ✓ Single gray checkmark = Sent
+- ✓✓ Double gray checkmarks = Delivered
+- ✓✓ Double blue/green checkmarks = Read
+
+**Real example:** `lib/message-status-utils.tsx`
+
+### Optimized Polling with Idle Detection
+Adaptive polling that reduces frequency when user is inactive.
+
+**Key Features:**
+- Active polling: 30 seconds when user is active
+- Idle polling: 60 seconds after 5 minutes of inactivity
+- Activity tracking: Mouse, keyboard, scroll, touch events
+- Visibility change detection (pause when tab hidden)
+
+**Best Practices:**
+- Use `passive: true` for event listeners
+- Always check `document.hidden` before requests
+- Prefer Socket.IO for real-time updates, use polling as fallback
+
+### Socket.IO Event Naming Convention
+**Pattern:** `resource:action`
+
+```typescript
+// Message events
+socket.on("message:created", handler)
+socket.on("message:new-reply", handler)
+
+// User events
+socket.on("user:typing", handler)
+socket.on("user:joined", handler)
+
+// Unread count events
+socket.on("unread:should-refresh", handler)
+```
+
+**Type Safety:**
+```typescript
+// types/socket.ts
+export interface ServerToClientEvents {
+  "message:created": (data: { message: Message }) => void;
+  "user:typing": (data: { userId: string; userName: string }) => void;
+}
+
+export interface ClientToServerEvents {
+  "message:send": (data: { content: string; threadId: string }) => void;
+}
+```
+
+---
+
+## Performance Optimization
+
+### Image Optimization (MANDATORY)
+- **Always use `next/image`** for all images
+- Set proper `width` and `height` to prevent layout shift
+- Use `priority` prop for above-the-fold images
+- Use appropriate `quality` settings (default 75)
+
+### Server Components (DEFAULT)
+- Use Server Components by default for better performance
+- Only add `"use client"` when necessary:
+  - Component uses React hooks (useState, useEffect, etc.)
+  - Component needs browser APIs (window, document)
+  - Component handles user interactions
+  - Component uses client-only libraries
+
+### React Optimization
+- Use `React.memo()` for expensive components
+- Implement proper loading states with Skeleton components
+- Lazy load heavy components with dynamic imports
+- Show optimistic UI updates where appropriate
+
+---
+
+## Accessibility
+
+- Always include proper ARIA labels
+- Ensure keyboard navigation works
+- Use semantic HTML elements
+- Maintain proper color contrast ratios
+- Add alt text to all images
+
+---
+
+## Input Validation
+
+**All user inputs MUST be validated:**
+
+- **Client-side:** Use Zod schemas with React Hook Form
+- **Server-side:** Always re-validate with Zod in API routes (never trust client)
+- **Sanitization:** Clean user inputs to prevent XSS/injection
+- **TypeScript:** Strict mode enabled for compile-time safety
+
+```typescript
+import { z } from "zod";
+
+const userSchema = z.object({
+  email: z.string().email("Invalid email"),
+  name: z.string().min(2).max(100),
+  age: z.number().int().positive().optional(),
+});
+
+// Server-side validation
+const result = userSchema.safeParse(data);
+if (!result.success) {
+  return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+}
+```
+
+---
+
+## Security Best Practices
+
+### Environment Variables & Secrets
+- **NEVER** hardcode API keys, secrets, or credentials
+- Use `.env.local` for local development (gitignored)
+- Access via `process.env.VARIABLE_NAME` in server-side code ONLY
+- Never expose environment variables to client components
+- Validate all required env vars at build time
+
+### Authentication & Password Security
+```typescript
+import bcrypt from "bcryptjs";
+
+// Hashing (registration)
+const hashedPassword = await bcrypt.hash(password, 12);
+
+// Verification (login)
+const isValid = await bcrypt.compare(password, user.hashedPassword);
+```
+
+### SQL/NoSQL Injection Prevention
+- Use Mongoose schemas with proper types
+- Never concatenate user input into queries
+- Use parameterized queries
+- Validate ObjectIds before queries
+
+### XSS Prevention
+- React automatically escapes JSX
+- Sanitize HTML if using `dangerouslySetInnerHTML` (avoid if possible)
+- Validate and sanitize all user inputs
+- Use Content Security Policy headers
+
+### File Upload Security
+```typescript
+// Validate file types
+const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+if (!allowedTypes.includes(file.type)) {
+  throw new Error("Invalid file type");
+}
+
+// Validate file size
+const maxSize = 5 * 1024 * 1024; // 5MB
+if (file.size > maxSize) {
+  throw new Error("File too large");
+}
+```
+
+### Error Handling Security
+```typescript
+// ✅ GOOD - Don't expose internal details
+console.error("Database error:", error); // Log for debugging
+return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+
+// ❌ BAD
+return NextResponse.json({ error: error.message }, { status: 500 });
+```
+
+### Session Security
+- NextAuth handles secure session tokens
+- Tokens are httpOnly cookies (protected from XSS)
+- Use secure: true in production
+- Set appropriate maxAge for sessions
+
+### HTTPS & Production Security
+- Always use HTTPS in production
+- Set secure headers (HSTS, CSP, X-Frame-Options)
+- Configure proper CORS policies
+- Keep dependencies updated
+
+---
 
 ## File Organization
 
-- All completed task documentation files (*.md) should be automatically placed in `.claude/completed-tasks/` folder
-- Task reports, integration guides, improvement documentation, and audit reports belong in `.claude/completed-tasks/`
-- Do not create documentation .md files in the root directory unless they are core project files like README.md or CONTRIBUTING.md
+```
+app/
+  (root)/          # Main app routes
+  auth/            # Authentication pages
+  admin/           # Admin dashboard
+  agent/           # Agent dashboard
+  client/          # Client dashboard
+  api/             # API routes
+components/
+  ui/              # shadcn/ui components
+  admin/           # Admin-specific components
+  agent/           # Agent-specific components
+  custom ui/       # Custom reusable components
+  client/shared/   # Shared client UI patterns
+lib/               # Utility functions and configs
+hooks/             # Custom React hooks
+types/             # TypeScript type definitions
+public/            # Static assets
+.claude/
+  docs/            # All Claude Code-generated documentation
+    guides/        # Setup and how-to guides
+    architecture/  # System architecture and feature docs
+    history/       # Historical fixes and improvements
+  completed-tasks/ # Completed task documentation (auto-organized)
+```
+
+### Documentation Organization (MANDATORY)
+
+**ALL documentation MUST go in `.claude/docs/` or `.claude/completed-tasks/` folder:**
+
+1. **Creating New Documentation**
+   - Implementation guides → `.claude/docs/architecture/`
+   - Setup/how-to guides → `.claude/docs/guides/`
+   - Fix/improvement summaries → `.claude/docs/history/`
+   - Completed task reports → `.claude/completed-tasks/` (auto-organized)
+
+2. **Root Directory Rules**
+   - ✅ Keep: `README.md` (project readme)
+   - ✅ Keep: `audit-report.md` (current audit state)
+   - ❌ NO other .md files in root
+   - Component READMEs stay with components
+
+3. **Completed Task Reports (AUTOMATIC ORGANIZATION)**
+   - **CRITICAL:** After completing ANY significant task, automatically create a completion report
+   - **ALWAYS** save to `.claude/completed-tasks/` folder
+   - **File naming:** Descriptive kebab-case (e.g., `whatsapp-messaging-implementation.md`)
+   - **Required sections:** Summary, Changes, Testing, Known issues, Date
+   - **Auto-organize:** Move any task .md files from root to `.claude/completed-tasks/`
+
+---
+
+## Error Handling UI
+
+- Use toast notifications for user feedback
+- Display meaningful error messages
+- Implement error boundaries for crash recovery
+- Log errors appropriately (console.error server-side)
+
+---
+
+## Common Utilities
+
+### cn() for Class Names
+```typescript
+import { cn } from "@/lib/utils";
+<div className={cn("base-class", conditional && "conditional-class", className)} />
+```
+
+### Date Formatting
+```typescript
+import { format } from "date-fns";
+const formatted = format(new Date(), "PPP");
+```
+
+---
+
+## Testing (FUTURE ENHANCEMENT)
+**Status:** ⚠️ Not yet implemented
+
+Consider adding:
+- **Unit/Integration:** Jest + React Testing Library
+- **E2E Testing:** Playwright or Cypress
+- **API Testing:** Supertest or Vitest
+
+---
+
+## Commit Message Style
+
+Follow semantic commit format:
+- `feat:` New feature
+- `fix:` Bug fix
+- `refactor:` Code refactoring
+- `style:` UI/style changes
+- `docs:` Documentation
+- `chore:` Maintenance tasks
+
+---
+
+## Final Reminders
+
+1. **Consistency is key** - Follow existing patterns in the codebase
+2. **Mobile-first** - Always design for mobile, then enhance for desktop
+3. **Accessibility** - Make it usable for everyone
+4. **Performance** - Keep it fast
+5. **Type safety** - Use TypeScript properly
+6. **User experience** - Smooth animations, clear feedback, intuitive UI
+7. **Dark mode** - Always support both themes
+8. **Internationalization** - Use next-intl for all user-facing text
+9. **Security first** - Never compromise on security
+10. **Document everything** - Keep `.claude/completed-tasks/` updated
