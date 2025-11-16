@@ -59,16 +59,8 @@ export async function POST(
           { status: 403 }
         );
       }
-    } else if (userRole === "agent") {
-      // Agents can only reply to messages they've accepted
-      if (!message.assignedTo || message.assignedTo.toString() !== session.user.id) {
-        return NextResponse.json(
-          { error: "Forbidden: You can only reply to messages you've accepted" },
-          { status: 403 }
-        );
-      }
     }
-    // Admins can reply to any message (no restriction)
+    // Agents and admins can reply to any message (no restriction)
 
     // Add reply
     message.replies.push({

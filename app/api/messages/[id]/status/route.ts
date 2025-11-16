@@ -51,16 +51,8 @@ export async function PATCH(
         { error: "Forbidden: Clients cannot update message status" },
         { status: 403 }
       );
-    } else if (userRole === "agent") {
-      // Agents can only update status of messages they've accepted
-      if (!message.assignedTo || message.assignedTo.toString() !== session.user.id) {
-        return NextResponse.json(
-          { error: "Forbidden: You can only update status of messages you've accepted" },
-          { status: 403 }
-        );
-      }
     }
-    // Admins can update any message status (no restriction)
+    // Agents and admins can update any message status (no restriction)
 
     // Store old status for email notification
     const oldStatus = message.status;

@@ -657,8 +657,7 @@ export function AgentChatWindow({
   const isAssignedToMe = message.assignedTo === session?.user?.id;
   const canReply =
     message.status !== "closed" &&
-    message.status !== "pending" &&
-    isAssignedToMe;
+    message.status !== "pending";
 
   return (
     <>
@@ -713,8 +712,8 @@ export function AgentChatWindow({
                 </div>
               )}
 
-              {/* Status Controls - Only show if assigned to agent */}
-              {message.status !== "pending" && isAssignedToMe && (
+              {/* Status Controls - Available to all agents */}
+              {message.status !== "pending" && (
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium text-gray-700">
@@ -748,19 +747,6 @@ export function AgentChatWindow({
                       Mark Resolved
                     </Button>
                   )}
-                </div>
-              )}
-
-              {/* Not assigned warning */}
-              {message.status !== "pending" && !isAssignedToMe && (
-                <div className="p-3 bg-gray-100 border border-gray-200 rounded-md">
-                  <p className="text-sm text-gray-700">
-                    <span className="font-medium">Assigned to:</span>{" "}
-                    {message.assignedToName || "Unassigned"}
-                  </p>
-                  <p className="text-xs text-gray-600 mt-1">
-                    You can only update the status of messages assigned to you
-                  </p>
                 </div>
               )}
             </div>
@@ -840,9 +826,7 @@ export function AgentChatWindow({
               <p className="text-sm text-gray-600">
                 {message.status === "pending"
                   ? "Accept this message first to start responding"
-                  : message.status === "closed"
-                    ? "This conversation has been closed. No more messages can be sent."
-                    : "You can only reply to messages assigned to you"}
+                  : "This conversation has been closed. No more messages can be sent."}
               </p>
             </div>
           )}

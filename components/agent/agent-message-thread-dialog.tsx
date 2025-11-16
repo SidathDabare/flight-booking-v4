@@ -210,8 +210,8 @@ export function AgentMessageThreadDialog({ message: initialMessage, open, onClos
   };
 
   const isMyMessage = message.assignedTo === session?.user?.id;
-  const canReply = message.status !== "closed" && message.status !== "pending" && isMyMessage;
-  const canUpdateStatus = isMyMessage && message.status !== "closed" && message.status !== "pending";
+  const canReply = message.status !== "closed" && message.status !== "pending";
+  const canUpdateStatus = message.status !== "closed" && message.status !== "pending";
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -323,12 +323,6 @@ export function AgentMessageThreadDialog({ message: initialMessage, open, onClos
             {message.status === "pending" && (
               <div className="text-center py-3 text-muted-foreground text-sm bg-muted rounded-lg">
                 Please accept this message first before you can reply
-              </div>
-            )}
-
-            {!isMyMessage && message.status !== "pending" && (
-              <div className="text-center py-3 text-muted-foreground text-sm bg-muted rounded-lg">
-                This message is assigned to {message.assignedToName}. Only they can reply.
               </div>
             )}
 

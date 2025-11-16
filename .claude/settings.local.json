@@ -7,7 +7,8 @@
       "Bash(move DELIVERY_STATUS_INTEGRATION_GUIDE.md .claude/completed-tasks/)",
       "Bash(move DELIVERY_STATUS_UPDATE.md .claude/completed-tasks/)",
       "Bash(move MESSAGING_IMPROVEMENTS.md .claude/completed-tasks/)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
