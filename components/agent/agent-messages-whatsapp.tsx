@@ -67,7 +67,7 @@ export function AgentMessagesWhatsApp() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterMode, setFilterMode] = useState<
     "all" | "pending" | "myMessages"
-  >("myMessages");
+  >("all");
   const [showChat, setShowChat] = useState(false);
   const [readMessageIds, setReadMessageIds] = useState<Set<string>>(new Set());
 
@@ -271,14 +271,14 @@ export function AgentMessagesWhatsApp() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="all">
+                    All Messages ({messages.length})
+                  </SelectItem>
                   <SelectItem value="myMessages">
                     My Messages ({getMyMessagesCount()})
                   </SelectItem>
                   <SelectItem value="pending">
                     Pending ({getPendingCount()})
-                  </SelectItem>
-                  <SelectItem value="all">
-                    All Messages ({messages.length})
                   </SelectItem>
                 </SelectContent>
               </Select>
