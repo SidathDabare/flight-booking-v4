@@ -8,7 +8,12 @@
       "Bash(move DELIVERY_STATUS_UPDATE.md .claude/completed-tasks/)",
       "Bash(move MESSAGING_IMPROVEMENTS.md .claude/completed-tasks/)",
       "Bash(mv:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(npm install:*)",
+      "Bash(npm test:*)",
+      "Bash(npm run test:coverage:*)",
+      "Bash(node scripts/organize-completed-tasks.js:*)",
+      "Bash(npm run organize:*)"
     ],
     "deny": [],
     "ask": []
