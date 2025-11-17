@@ -2,6 +2,13 @@ import mongoose from "mongoose";
 
 const OrderSchema = new mongoose.Schema(
   {
+    // Booking type discriminator: "flight-offer", "hotel-booking", or "car-rental"
+    bookingType: {
+      type: String,
+      enum: ["flight-offer", "hotel-booking", "car-rental"],
+      required: true,
+      index: true,
+    },
     data: {
       type: {
         type: String,
@@ -13,7 +20,7 @@ const OrderSchema = new mongoose.Schema(
       },
       queuingOfficeId: {
         type: String,
-        required: true,
+        required: false, // Not required for hotels/cars
       },
       associatedRecords: [
         {
@@ -404,6 +411,18 @@ const OrderSchema = new mongoose.Schema(
       },
       userId: {
         type: String,
+        required: true,
+        index: true,
+      },
+      confirmationNumber: {
+        type: String, // Used for hotels/cars
+      },
+      totalAmount: {
+        type: Number,
+      },
+      currency: {
+        type: String,
+        default: "USD",
       },
     },
     status: {
@@ -423,9 +442,20 @@ const OrderSchema = new mongoose.Schema(
       type: Date,
       required: false,
     },
+    // For multi-booking transactions (e.g., flight + hotel + car in one purchase)
+    groupId: {
+      type: String,
+      index: true,
+    },
   },
   { timestamps: true }
 ); // Adds createdAt and updatedAt fields
+
+// Indexes for efficient queries
+OrderSchema.index({ bookingType: 1, "metadata.userId": 1 });
+OrderSchema.index({ createdAt: -1 });
+OrderSchema.index({ status: 1 });
+OrderSchema.index({ groupId: 1 });
 
 const Order = mongoose.models.Order || mongoose.model("Order", OrderSchema);
 

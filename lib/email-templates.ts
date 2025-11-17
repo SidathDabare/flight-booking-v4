@@ -301,3 +301,209 @@ export function getMessageStatusChangeNotificationTemplate(
     </div>
   `;
 }
+
+export function getHotelBookingConfirmationTemplate(
+  customerName: string,
+  confirmationNumber: string,
+  hotelName: string,
+  hotelAddress: string,
+  checkInDate: string,
+  checkOutDate: string,
+  numberOfNights: number,
+  roomType: string,
+  guestNames: string[],
+  totalPrice: number,
+  currency: string
+) {
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9fafb;">
+      <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <div style="background-color: #10b981; color: white; width: 60px; height: 60px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+            <span style="font-size: 30px;">✓</span>
+          </div>
+          <h1 style="color: #1f2937; margin: 0 0 10px 0;">Hotel Booking Confirmed!</h1>
+          <p style="color: #6b7280; font-size: 16px;">Your reservation is confirmed and ready</p>
+        </div>
+
+        <div style="background-color: #eff6ff; padding: 20px; border-radius: 8px; margin-bottom: 25px; border-left: 4px solid #3b82f6;">
+          <p style="margin: 0 0 5px 0; color: #6b7280; font-size: 14px;">Confirmation Number</p>
+          <p style="margin: 0; color: #1f2937; font-size: 24px; font-weight: bold;">${confirmationNumber}</p>
+        </div>
+
+        <h2 style="color: #1f2937; font-size: 20px; margin-bottom: 15px;">Hotel Details</h2>
+        <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+          <p style="margin: 0 0 10px 0;"><strong style="color: #1f2937; font-size: 18px;">${hotelName}</strong></p>
+          <p style="margin: 0; color: #6b7280; font-size: 14px;">📍 ${hotelAddress}</p>
+        </div>
+
+        <h2 style="color: #1f2937; font-size: 20px; margin-bottom: 15px;">Reservation Details</h2>
+        <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+              <td style="padding: 8px 0; color: #6b7280;">Check-in</td>
+              <td style="padding: 8px 0; color: #1f2937; font-weight: 600; text-align: right;">${checkInDate}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; color: #6b7280;">Check-out</td>
+              <td style="padding: 8px 0; color: #1f2937; font-weight: 600; text-align: right;">${checkOutDate}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; color: #6b7280;">Number of Nights</td>
+              <td style="padding: 8px 0; color: #1f2937; font-weight: 600; text-align: right;">${numberOfNights}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; color: #6b7280;">Room Type</td>
+              <td style="padding: 8px 0; color: #1f2937; font-weight: 600; text-align: right;">${roomType}</td>
+            </tr>
+          </table>
+        </div>
+
+        <h2 style="color: #1f2937; font-size: 20px; margin-bottom: 15px;">Guest Information</h2>
+        <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+          ${guestNames.map((name, i) => `
+            <p style="margin: 5px 0; color: #1f2937;">
+              ${i === 0 ? '👤 ' : '• '}<strong>${name}</strong>${i === 0 ? ' (Main Guest)' : ''}
+            </p>
+          `).join('')}
+        </div>
+
+        <div style="border-top: 2px solid #e5e7eb; padding-top: 20px; margin-top: 25px;">
+          <table style="width: 100%;">
+            <tr>
+              <td style="padding: 10px 0; color: #1f2937; font-size: 18px;"><strong>Total Amount Paid</strong></td>
+              <td style="padding: 10px 0; color: #10b981; font-size: 24px; font-weight: bold; text-align: right;">
+                ${currency} ${totalPrice.toFixed(2)}
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div style="background-color: #fef3c7; padding: 15px; border-radius: 8px; margin-top: 25px; border-left: 4px solid #f59e0b;">
+          <p style="margin: 0 0 10px 0; color: #92400e; font-weight: 600;">Important Information</p>
+          <ul style="margin: 0; padding-left: 20px; color: #92400e; font-size: 14px;">
+            <li>Please bring this confirmation and a valid ID</li>
+            <li>Check-in time is usually after 3:00 PM</li>
+            <li>Check-out time is usually before 12:00 PM</li>
+            <li>Contact the hotel directly for special requests</li>
+          </ul>
+        </div>
+
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px;">
+          <p>If you have any questions about your booking, please contact us.</p>
+          <p style="margin-top: 20px;">Best regards,<br><strong>Flight Booking Team</strong></p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+export function getCarRentalConfirmationTemplate(
+  customerName: string,
+  confirmationNumber: string,
+  vehicleMake: string,
+  vehicleModel: string,
+  vehicleCategory: string,
+  vendorName: string,
+  pickupLocation: string,
+  dropoffLocation: string,
+  pickupDate: string,
+  dropoffDate: string,
+  durationDays: number,
+  driverName: string,
+  insurance: string[],
+  totalPrice: number,
+  currency: string
+) {
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9fafb;">
+      <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <div style="background-color: #f97316; color: white; width: 60px; height: 60px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+            <span style="font-size: 30px;">🚗</span>
+          </div>
+          <h1 style="color: #1f2937; margin: 0 0 10px 0;">Car Rental Confirmed!</h1>
+          <p style="color: #6b7280; font-size: 16px;">Your vehicle is reserved and ready</p>
+        </div>
+
+        <div style="background-color: #fff7ed; padding: 20px; border-radius: 8px; margin-bottom: 25px; border-left: 4px solid #f97316;">
+          <p style="margin: 0 0 5px 0; color: #6b7280; font-size: 14px;">Confirmation Number</p>
+          <p style="margin: 0; color: #1f2937; font-size: 24px; font-weight: bold;">${confirmationNumber}</p>
+        </div>
+
+        <h2 style="color: #1f2937; font-size: 20px; margin-bottom: 15px;">Vehicle Details</h2>
+        <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+          <p style="margin: 0 0 10px 0;"><strong style="color: #1f2937; font-size: 18px;">${vehicleMake} ${vehicleModel}</strong></p>
+          <p style="margin: 0; color: #6b7280; font-size: 14px;">Category: ${vehicleCategory}</p>
+          <p style="margin: 5px 0 0 0; color: #6b7280; font-size: 14px;">Vendor: ${vendorName}</p>
+        </div>
+
+        <h2 style="color: #1f2937; font-size: 20px; margin-bottom: 15px;">Rental Details</h2>
+        <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+              <td style="padding: 8px 0; color: #6b7280;">Pick-up Location</td>
+              <td style="padding: 8px 0; color: #1f2937; font-weight: 600; text-align: right;">${pickupLocation}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; color: #6b7280;">Drop-off Location</td>
+              <td style="padding: 8px 0; color: #1f2937; font-weight: 600; text-align: right;">${dropoffLocation}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; color: #6b7280;">Pick-up Date & Time</td>
+              <td style="padding: 8px 0; color: #1f2937; font-weight: 600; text-align: right;">${pickupDate}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; color: #6b7280;">Drop-off Date & Time</td>
+              <td style="padding: 8px 0; color: #1f2937; font-weight: 600; text-align: right;">${dropoffDate}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; color: #6b7280;">Rental Duration</td>
+              <td style="padding: 8px 0; color: #1f2937; font-weight: 600; text-align: right;">${durationDays} day${durationDays > 1 ? 's' : ''}</td>
+            </tr>
+          </table>
+        </div>
+
+        <h2 style="color: #1f2937; font-size: 20px; margin-bottom: 15px;">Driver Information</h2>
+        <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+          <p style="margin: 0; color: #1f2937;">👤 <strong>${driverName}</strong></p>
+        </div>
+
+        ${insurance.length > 0 ? `
+          <h2 style="color: #1f2937; font-size: 20px; margin-bottom: 15px;">Insurance Coverage</h2>
+          <div style="background-color: #f0fdf4; padding: 20px; border-radius: 8px; margin-bottom: 25px; border-left: 4px solid #10b981;">
+            ${insurance.map(ins => `
+              <p style="margin: 5px 0; color: #065f46;">✓ ${ins}</p>
+            `).join('')}
+          </div>
+        ` : ''}
+
+        <div style="border-top: 2px solid #e5e7eb; padding-top: 20px; margin-top: 25px;">
+          <table style="width: 100%;">
+            <tr>
+              <td style="padding: 10px 0; color: #1f2937; font-size: 18px;"><strong>Total Amount Paid</strong></td>
+              <td style="padding: 10px 0; color: #f97316; font-size: 24px; font-weight: bold; text-align: right;">
+                ${currency} ${totalPrice.toFixed(2)}
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div style="background-color: #fef3c7; padding: 15px; border-radius: 8px; margin-top: 25px; border-left: 4px solid #f59e0b;">
+          <p style="margin: 0 0 10px 0; color: #92400e; font-weight: 600;">Important Information</p>
+          <ul style="margin: 0; padding-left: 20px; color: #92400e; font-size: 14px;">
+            <li>Bring your driver's license and confirmation</li>
+            <li>Credit card required for security deposit</li>
+            <li>Inspect the vehicle before driving</li>
+            <li>Fuel policy: Return with same fuel level</li>
+          </ul>
+        </div>
+
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px;">
+          <p>If you have any questions about your rental, please contact us or the vendor directly.</p>
+          <p style="margin-top: 20px;">Best regards,<br><strong>Flight Booking Team</strong></p>
+        </div>
+      </div>
+    </div>
+  `;
+}
