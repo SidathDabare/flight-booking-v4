@@ -6,8 +6,6 @@ import {
   getNewReplyNotificationTemplate,
   getMessageAssignedNotificationTemplate,
   getMessageStatusChangeNotificationTemplate,
-  getHotelBookingConfirmationTemplate,
-  getCarRentalConfirmationTemplate,
 } from "./email-templates";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -304,98 +302,6 @@ export async function sendMessageStatusChangeNotification(
     });
   } catch (error) {
     console.error("Error sending status change notification:", error);
-    // Don't throw error - email is not critical for the operation
-  }
-}
-
-export async function sendHotelBookingConfirmation(
-  customerEmail: string,
-  customerName: string,
-  confirmationNumber: string,
-  hotelData: {
-    name: string;
-    address: string;
-    checkInDate: string;
-    checkOutDate: string;
-    numberOfNights: number;
-    roomType: string;
-    guestNames: string[];
-    totalPrice: number;
-    currency: string;
-  }
-) {
-  try {
-    await resend.emails.send({
-      from: process.env.EMAIL_FROM || "onboarding@resend.dev",
-      to: customerEmail,
-      subject: `Hotel Booking Confirmed - ${confirmationNumber}`,
-      html: getHotelBookingConfirmationTemplate(
-        customerName,
-        confirmationNumber,
-        hotelData.name,
-        hotelData.address,
-        hotelData.checkInDate,
-        hotelData.checkOutDate,
-        hotelData.numberOfNights,
-        hotelData.roomType,
-        hotelData.guestNames,
-        hotelData.totalPrice,
-        hotelData.currency
-      ),
-    });
-    console.log("Hotel booking confirmation email sent to:", customerEmail);
-  } catch (error) {
-    console.error("Error sending hotel booking confirmation:", error);
-    // Don't throw error - email is not critical for the operation
-  }
-}
-
-export async function sendCarRentalConfirmation(
-  customerEmail: string,
-  customerName: string,
-  confirmationNumber: string,
-  carData: {
-    vehicleMake: string;
-    vehicleModel: string;
-    vehicleCategory: string;
-    vendorName: string;
-    pickupLocation: string;
-    dropoffLocation: string;
-    pickupDate: string;
-    dropoffDate: string;
-    durationDays: number;
-    driverName: string;
-    insurance: string[];
-    totalPrice: number;
-    currency: string;
-  }
-) {
-  try {
-    await resend.emails.send({
-      from: process.env.EMAIL_FROM || "onboarding@resend.dev",
-      to: customerEmail,
-      subject: `Car Rental Confirmed - ${confirmationNumber}`,
-      html: getCarRentalConfirmationTemplate(
-        customerName,
-        confirmationNumber,
-        carData.vehicleMake,
-        carData.vehicleModel,
-        carData.vehicleCategory,
-        carData.vendorName,
-        carData.pickupLocation,
-        carData.dropoffLocation,
-        carData.pickupDate,
-        carData.dropoffDate,
-        carData.durationDays,
-        carData.driverName,
-        carData.insurance,
-        carData.totalPrice,
-        carData.currency
-      ),
-    });
-    console.log("Car rental confirmation email sent to:", customerEmail);
-  } catch (error) {
-    console.error("Error sending car rental confirmation:", error);
     // Don't throw error - email is not critical for the operation
   }
 }
