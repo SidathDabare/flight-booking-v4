@@ -4,7 +4,7 @@ import Comments from "@/components/home/comments";
 // import FeaturedDestinations from "@/components/home/featured-destinations";
 import Offers from "@/components/home/offers";
 import TravelTips from "@/components/home/travel-tips";
-import UnifiedSearch from "@/components/custom ui/unified-search/unified-search";
+import FlightSearch from "@/components/custom ui/flight-search-main/flight-search";
 import LoadingScreen from "@/components/ui/loading-screen";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
@@ -17,7 +17,7 @@ const Home = () => {
   return (
     <div className="w-full relative h-auto mx-auto">
       {isCarouselLoading && <LoadingScreen />}
-      {/* <UnifiedSearch onCarouselLoadingChange={setIsCarouselLoading} /> */}
+      <FlightSearch onCarouselLoadingChange={setIsCarouselLoading} />
       {/* <FeaturedDestinations /> */}
       <Offers />
       <TravelTips />
